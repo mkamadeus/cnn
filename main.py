@@ -1,23 +1,36 @@
+import cnn
 from cnn.layer import ConvolutionalLayer
-from cnn.utils import generate_strides
+from cnn.layer import PoolingLayer
 import numpy as np
 from icecream import ic
 
-cnn = ConvolutionalLayer(
-    np.array(
+model = cnn.Sequential()
+model.add(
+    ConvolutionalLayer(
+        kernel=np.array(
+            [
+                [1, 1],
+                [0, 1],
+            ]
+        ),
+        stride=1,
+        padding=0,
+    )
+)
+model.add(
+    PoolingLayer(
+        size=(2, 2),
+        stride=1,
+        mode="max",
+    )
+)
+result = model.run(
+    inputs=np.array(
         [
             [1, 7, 2],
             [11, 1, 23],
             [2, 2, 2],
         ]
-    ),
-    np.array(
-        [
-            [1, 1],
-            [0, 1],
-        ]
-    ),
+    )
 )
-ic(cnn)
-fm = cnn.convolution(1, 0)
-ic(fm)
+ic(result)

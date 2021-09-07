@@ -1,4 +1,4 @@
-from cnn.layer import BaseLayer
+from cnn.layer.base import BaseLayer
 from cnn.utils import generate_strides, pad_array
 import numpy as np
 from icecream import ic
