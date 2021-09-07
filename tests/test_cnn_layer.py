@@ -1,7 +1,6 @@
 from cnn.layer import ConvolutionalLayer
 import unittest
 import numpy as np
-from cnn.utils import generate_strides, pad_array
 from numpy.testing import assert_array_equal
 
 
