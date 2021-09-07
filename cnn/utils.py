@@ -20,16 +20,19 @@ def pad_array(mat: np.array, size: int, padder: int):
     return padded
 
 
-# TODO: fix stride, should stride vertically as well
 def generate_strides(mat: np.array, kernel_size: Tuple[int, int], stride: int = 1):
     """
     Generates possible array strides from given kernel size
     """
+    # calculates view shape and strides for as_strided
     view_shape = tuple(np.subtract(mat.shape, kernel_size) + 1) + kernel_size
     view_strides = mat.strides + mat.strides
 
-    strided_matrices = as_strided(mat, strides=view_strides, shape=view_shape)
+    # generate all view, strides every column and row
+    strided_matrices = as_strided(mat, strides=view_strides, shape=view_shape)[::stride, ::stride]
     strided_shape = strided_matrices.shape
+
+    # flatten outer dimension
     result = strided_matrices.reshape((strided_shape[0] * strided_shape[1], strided_shape[2], strided_shape[3]))
 
     return result

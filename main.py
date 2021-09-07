@@ -13,4 +13,4 @@ mat = np.array(
     ]
 )
 
-ic(generate_strides(mat, (2, 2)))
+ic(generate_strides(mat, (2, 2), 2))
