@@ -23,4 +23,5 @@ jobs:
           pip install -r requirements.txt
       - name: Check with black
         uses: lgeiger/black-action@v1.0.1
-        args: ". --check"
+        with:
+          args: "./**/*.py --check"
