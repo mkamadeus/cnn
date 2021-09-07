@@ -28,12 +28,16 @@ class ConvolutionalLayer:
         ic(strided_views)
 
         # multiply all view with kernel
-        multiplied_views = np.array([np.multiply(view, self.kernel) for view in strided_views])
+        multiplied_views = np.array(
+            [np.multiply(view, self.kernel) for view in strided_views]
+        )
         ic(multiplied_views)
         ic(multiplied_views.shape)
 
         # make feature map
-        feature_map = np.array([[np.sum(view) for view in row] for row in multiplied_views])
+        feature_map = np.array(
+            [[np.sum(view) for view in row] for row in multiplied_views]
+        )
         ic(feature_map)
 
         return feature_map

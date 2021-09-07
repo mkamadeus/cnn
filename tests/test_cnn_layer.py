@@ -24,9 +24,10 @@ class TestCNNLayer(unittest.TestCase):
             ),
         )
         feature_map = layer.convolution(1, 0)
-        expected = np.array([
-            [9,32],
-            [14,26],
-        ])
+        expected = np.array(
+            [
+                [9, 32],
+                [14, 26],
+            ]
+        )
         self.assertIsNone(assert_array_equal(feature_map, expected))
-
