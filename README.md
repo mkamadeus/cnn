@@ -1,6 +1,8 @@
 # cnn
 
 [![made-with-python](https://img.shields.io/badge/Made%20with-Python%203.8-1f425f.svg)](https://www.python.org/)
+![lint-badge](https://github.com/mkamadeus/cnn/actions/workflows/lint.yml/badge.svg)
+![lint-badge](https://github.com/mkamadeus/cnn/actions/workflows/test.yml/badge.svg)
 
 Implementation of Convolutional Neural Networks (CNN) for IF4074 Advanced Machine Learning. Implemented in Python 3.8.
 
