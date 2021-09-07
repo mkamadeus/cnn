@@ -29,10 +29,14 @@ def generate_strides(mat: np.array, kernel_size: Tuple[int, int], stride: int = 
     view_strides = mat.strides + mat.strides
 
     # generate all view, strides every column and row
-    strided_matrices = as_strided(mat, strides=view_strides, shape=view_shape)[::stride, ::stride]
+    strided_matrices = as_strided(mat, strides=view_strides, shape=view_shape)[
+        ::stride, ::stride
+    ]
     strided_shape = strided_matrices.shape
 
     # flatten outer dimension
-    result = strided_matrices.reshape((strided_shape[0] * strided_shape[1], strided_shape[2], strided_shape[3]))
+    result = strided_matrices.reshape(
+        (strided_shape[0] * strided_shape[1], strided_shape[2], strided_shape[3])
+    )
 
     return result
