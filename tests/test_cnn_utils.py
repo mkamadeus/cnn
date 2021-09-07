@@ -45,20 +45,96 @@ class TestCNNUtils(unittest.TestCase):
         expected = np.array(
             [
                 [
-                    [1, 2],
-                    [4, 5],
+                    [
+                        [1, 2],
+                        [4, 5],
+                    ],
+                    [
+                        [2, 3],
+                        [5, 6],
+                    ],
                 ],
                 [
-                    [2, 3],
-                    [5, 6],
+                    [
+                        [4, 5],
+                        [7, 8],
+                    ],
+                    [
+                        [5, 6],
+                        [8, 9],
+                    ],
+                ],
+            ]
+        )
+        self.assertIsNone(assert_array_equal(result, expected))
+
+    def test_generate_strides_2(self):
+        # makes 1..16 as a 4x4 matrix
+        mat = (np.arange(16) + 1).reshape((4, 4))
+
+        result = generate_strides(mat, (2, 2), 2)
+        expected = np.array(
+            [
+                [
+                    [
+                        [1, 2],
+                        [5, 6],
+                    ],
+                    [
+                        [3, 4],
+                        [7, 8],
+                    ],
                 ],
                 [
-                    [4, 5],
-                    [7, 8],
+                    [
+                        [9, 10],
+                        [13, 14],
+                    ],
+                    [
+                        [11, 12],
+                        [15, 16],
+                    ],
+                ],
+            ]
+        )
+        self.assertIsNone(assert_array_equal(result, expected))
+
+    def test_generate_strides_padded(self):
+        # makes 1..16 as a 4x4 matrix
+        mat = (np.arange(4) + 11).reshape((2, 2))
+        padded = pad_array(mat, 1, 0)
+        expected_padded = np.array(
+            [
+                [0, 0, 0, 0],
+                [0, 11, 12, 0],
+                [0, 13, 14, 0],
+                [0, 0, 0, 0],
+            ]
+        )
+        self.assertIsNone(assert_array_equal(padded, expected_padded))
+
+        result = generate_strides(expected_padded, (2, 2), 2)
+        expected = np.array(
+            [
+                [
+                    [
+                        [0, 0],
+                        [0, 11],
+                    ],
+                    [
+                        [0, 0],
+                        [12, 0],
+                    ],
                 ],
                 [
-                    [5, 6],
-                    [8, 9],
+                    [
+                        [0, 13],
+                        [0, 0],
+                    ],
+                    [
+                        [14, 0],
+                        [0, 0],
+                    ],
                 ],
             ]
         )

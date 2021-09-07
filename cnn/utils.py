@@ -16,6 +16,11 @@ def pad_array(mat: np.array, size: int, padder: int):
     """
     Pads a 2D array with `padder` as the number pads.
     """
+    if size < 0:
+        raise Exception("size should be bigger than 0")
+    if size == 0:
+        return mat
+
     padded = np.pad(mat, size, pad_with, padder=padder)
     return padded
 
@@ -29,14 +34,6 @@ def generate_strides(mat: np.array, kernel_size: Tuple[int, int], stride: int = 
     view_strides = mat.strides + mat.strides
 
     # generate all view, strides every column and row
-    strided_matrices = as_strided(mat, strides=view_strides, shape=view_shape)[
-        ::stride, ::stride
-    ]
-    strided_shape = strided_matrices.shape
-
-    # flatten outer dimension
-    result = strided_matrices.reshape(
-        (strided_shape[0] * strided_shape[1], strided_shape[2], strided_shape[3])
-    )
+    result = as_strided(mat, strides=view_strides, shape=view_shape)[::stride, ::stride]
 
     return result
