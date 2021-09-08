@@ -8,19 +8,14 @@ class TestCNNLayer(unittest.TestCase):
     # TODO: multiple channels, multiple kernels
     def test_convolution(self):
         layer = ConvolutionalLayer(
-            np.array(
-                [
-                    [1, 7, 2],
-                    [11, 1, 23],
-                    [2, 2, 2],
-                ]
-            ),
-            np.array(
+            kernel=np.array(
                 [
                     [1, 1],
                     [0, 1],
                 ]
             ),
+            stride=1,
+            padding=0,
         )
         feature_map = layer.convolution(1, 0)
         expected = np.array(
