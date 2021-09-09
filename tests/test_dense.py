@@ -16,4 +16,4 @@ def test_dense():
     result = layer.run(inputs=np.array([1, 2, 3]))
     expected = np.array([14, 14, 14])
 
-    assert np.testing.assert_array_equal(result, expected) == None
+    assert np.testing.assert_array_equal(result, expected) is None
