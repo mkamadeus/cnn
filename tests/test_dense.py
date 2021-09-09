@@ -7,13 +7,13 @@ def test_dense():
         size=3,
         weights=np.array(
             [
-                [0, 1, 2, 3],
-                [0, 1, 2, 3],
-                [0, 1, 2, 3],
+                [0.3, 0.3, 0.3, 0.3],
+                [0.2, 0.2, 0.2, 0.2],
+                [0.1, 0.1, 0.1, 0.1],
             ]
         ),
     )
     result = layer.run(inputs=np.array([1, 2, 3]))
-    expected = np.array([14, 14, 14])
+    expected = np.array([0.890903, 0.802183, 0.668187])
 
-    assert np.testing.assert_array_equal(result, expected) is None
+    assert np.testing.assert_array_almost_equal(result, expected) is None
