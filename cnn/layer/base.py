@@ -9,6 +9,5 @@ class BaseLayer:
     def __init__(self):
         return
 
-    def run(self, inputs: np.array):
+    def run(self, inputs: np.ndarray) -> np.ndarray:
         return inputs
-    
