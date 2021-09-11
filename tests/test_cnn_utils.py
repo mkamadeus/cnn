@@ -1,6 +1,6 @@
 import unittest
 import numpy as np
-from cnn.utils import generate_strides, pad_array
+from cnn.utils import generate_strides, pad_array, generate_random_uniform_matrixes
 from numpy.testing import assert_array_equal
 
 
@@ -139,3 +139,14 @@ class TestCNNUtils(unittest.TestCase):
             ]
         )
         self.assertIsNone(assert_array_equal(result, expected))
+
+    def test_generate_random_matrixes_1(self):
+        # makes 3 random uniform 2x2 matrixes
+        n_matrix = 3
+        size = (2, 2)
+
+        result = generate_random_uniform_matrixes(n_matrix, size)
+
+        self.assertEqual(result.shape, (3, 2, 2))
+        self.assertTrue(result.min() >= -1.0)
+        self.assertTrue(result.max() <= 1.0)

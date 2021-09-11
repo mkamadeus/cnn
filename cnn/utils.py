@@ -37,3 +37,10 @@ def generate_strides(mat: np.array, kernel_size: Tuple[int, int], stride: int = 
     result = as_strided(mat, strides=view_strides, shape=view_shape)[::stride, ::stride]
 
     return result
+
+
+def generate_random_uniform_matrixes(n_matrix: int, size: Tuple[int, int]):
+    """
+    Generates n random uniform matrixes from given kernel size
+    """
+    return np.array([np.random.uniform(low=-1.0, high=1.0, size=size) for i in range(n_matrix)])
