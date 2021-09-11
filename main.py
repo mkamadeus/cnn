@@ -7,12 +7,7 @@ from icecream import ic
 model = cnn.Sequential()
 model.add(
     ConvolutionalLayer(
-        kernel=np.array(
-            [
-                [1, 1],
-                [0, 1],
-            ]
-        ),
+        kernel_shape=(2, 2),
         stride=1,
         padding=0,
     )

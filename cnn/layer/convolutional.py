@@ -9,10 +9,12 @@ class ConvolutionalLayer(BaseLayer):
     Defines a convolutional layer consisting of inputs and kernels.
     """
 
-    def __init__(self, kernel: np.array, stride: int, padding: int):
+    def __init__(self, kernel_shape: tuple, stride: int, padding: int):
         self.stride = stride
         self.padding = padding
-        self.kernel = kernel
+
+        # uniformly random matrix based on kernel shape from -1 to 1
+        self.kernel = np.random.uniform(low=-1.0, high=1.0, size=kernel_shape)
 
     # TODO: multiple channels, multiple kernels
     def run(self, inputs: np.array):
