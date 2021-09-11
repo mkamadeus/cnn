@@ -2,6 +2,7 @@ from cnn.layer.base import BaseLayer
 from cnn.utils import generate_strides, pad_array, generate_random_uniform_matrixes
 import numpy as np
 from icecream import ic
+from cnn.activations import relu
 
 
 class ConvolutionalLayer(BaseLayer):
@@ -42,8 +43,22 @@ class ConvolutionalLayer(BaseLayer):
             ic(feature_map)
 
             feature_maps_reg_array.append(feature_map)
-
+        ic(np.array(feature_maps_reg_array))
         return np.array(feature_maps_reg_array)
+
+    def detector(self, feature_map: np.array):
+        # Preparing the output of the ReLU activation function.
+        # print(feature_map.shape)
+        relu_out = np.zeros(feature_map.shape)
+        for map_num in range(feature_map.shape[-1]):
+            for r in np.arange(0, feature_map.shape[0]):
+                for c in np.arange(0, feature_map.shape[1]):
+                    # print(relu(feature_map[r, c, map_num]))
+                    # print(feature_map[r, c, map_num])
+                    relu_out[r, map_num] = relu(feature_map[r, c, map_num])
+
+        # ic(relu_out)
+        return relu_out
 
     # TODO: multiple channels, multiple kernels
     def run(self, inputs: np.array):
@@ -63,6 +78,9 @@ class ConvolutionalLayer(BaseLayer):
         # # make feature map
         # feature_map = np.array([[np.sum(view) for view in row] for row in multiplied_views])
         # ic(feature_map)
-
+        print("oy")
         # return feature_map
-        return self.run_convolution_stage(inputs)
+        feature_map = self.run_convolution_stage(inputs)
+        output = self.detector(feature_map)
+
+        return output
