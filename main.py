@@ -1,26 +1,26 @@
 import cnn
 from cnn.layer import ConvolutionalLayer
-from cnn.layer import PoolingLayer
+# from cnn.layer import PoolingLayer
 import numpy as np
 from icecream import ic
 
 model = cnn.Sequential()
 model.add(
     ConvolutionalLayer(
-        input_size=(3, 3),
+        input_shape=(3, 3),
         padding=0,
         filter_count=3,
         kernel_shape=(2, 2),
         stride=1,
     )
 )
-model.add(
-    PoolingLayer(
-        size=(2, 2),
-        stride=1,
-        mode="max",
-    )
-)
+# model.add(
+#     PoolingLayer(
+#         size=(2, 2),
+#         stride=1,
+#         mode="max",
+#     )
+# )
 result = model.run(
     inputs=np.array(
         [
