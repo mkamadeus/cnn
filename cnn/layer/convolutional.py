@@ -2,7 +2,7 @@ from cnn.layer.base import BaseLayer
 from cnn.utils import generate_strides, pad_array, generate_random_uniform_matrixes
 import numpy as np
 from icecream import ic
-from cnn.activations import relu
+from cnn.activations import relu, sigmoid
 
 
 class ConvolutionalLayer(BaseLayer):
@@ -46,19 +46,20 @@ class ConvolutionalLayer(BaseLayer):
         ic(np.array(feature_maps_reg_array))
         return np.array(feature_maps_reg_array)
 
-    def detector(self, feature_map: np.array):
-        # Preparing the output of the ReLU activation function.
-        # print(feature_map.shape)
-        relu_out = np.zeros(feature_map.shape)
-        for map_num in range(feature_map.shape[-1]):
-            for r in np.arange(0, feature_map.shape[0]):
-                for c in np.arange(0, feature_map.shape[1]):
-                    # print(relu(feature_map[r, c, map_num]))
-                    # print(feature_map[r, c, map_num])
-                    relu_out[r, map_num] = relu(feature_map[r, c, map_num])
+    def detector(self, feature_map: np.array, act: str):
+        if act == "relu":
+            relu_f = lambda x: relu(x)
+            relu_func = np.vectorize(relu_f, otypes=[np.float])
+            
+            ic(relu_func(feature_map))
+            return relu_func(feature_map)
+        elif act == "sigmoid":
+            sig_f = lambda x: sigmoid(x)
+            sigmoid_func = np.vectorize(sig_f, otypes=[np.float])
 
-        # ic(relu_out)
-        return relu_out
+            ic(sigmoid_func(feature_map))
+            return sigmoid_func(feature_map)
+
 
     # TODO: multiple channels, multiple kernels
     def run(self, inputs: np.array):
@@ -78,9 +79,9 @@ class ConvolutionalLayer(BaseLayer):
         # # make feature map
         # feature_map = np.array([[np.sum(view) for view in row] for row in multiplied_views])
         # ic(feature_map)
-        print("oy")
+        
         # return feature_map
         feature_map = self.run_convolution_stage(inputs)
-        output = self.detector(feature_map)
+        output = self.detector(feature_map, "sigmoid")
 
         return output
