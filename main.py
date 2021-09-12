@@ -7,7 +7,7 @@ from icecream import ic
 model = cnn.Sequential()
 model.add(
     ConvolutionalLayer(
-        input_shape=(3, 3),
+        input_shape=(3, 3, 3),
         padding=0,
         filter_count=3,
         kernel_shape=(2, 2),
@@ -24,9 +24,21 @@ model.add(
 result = model.run(
     inputs=np.array(
         [
-            [1, 7, 2],
-            [11, 1, 23],
-            [2, 2, 2],
+            [
+                [1, 7, 2],
+                [11, 1, 23],
+                [2, 2, 2],
+            ],
+            [
+                [1, 7, 2],
+                [11, 1, 23],
+                [2, 2, 2],
+            ],
+            [
+                [1, 7, 2],
+                [11, 1, 23],
+                [2, 2, 2],
+            ],
         ]
     )
 )
