@@ -10,8 +10,9 @@ class ConvolutionalLayer(BaseLayer):
     Defines a convolutional layer consisting of inputs and kernels.
     """
 
-    def __init__(self, input_shape: tuple, padding: int, filter_count: int, kernel_shape: tuple, stride: int):
+    def __init__(self, input_shape: tuple, activation: str, padding: int, filter_count: int, kernel_shape: tuple, stride: int):
         self.input_shape = input_shape
+        self.activation = activation
         self.padding = padding
         self.filter_count = filter_count
         self.kernel_shape = kernel_shape
@@ -46,14 +47,14 @@ class ConvolutionalLayer(BaseLayer):
         ic(np.array(feature_maps_reg_array))
         return np.array(feature_maps_reg_array)
 
-    def detector(self, feature_map: np.array, act: str):
-        if act == "relu":
+    def detector(self, feature_map: np.array):
+        if self.activation == "relu":
             relu_f = lambda x: relu(x)
             relu_func = np.vectorize(relu_f, otypes=[np.float])
             
             ic(relu_func(feature_map))
             return relu_func(feature_map)
-        elif act == "sigmoid":
+        elif self.activation == "sigmoid":
             sig_f = lambda x: sigmoid(x)
             sigmoid_func = np.vectorize(sig_f, otypes=[np.float])
 
@@ -82,6 +83,6 @@ class ConvolutionalLayer(BaseLayer):
         
         # return feature_map
         feature_map = self.run_convolution_stage(inputs)
-        output = self.detector(feature_map, "sigmoid")
+        output = self.detector(feature_map)
 
         return output

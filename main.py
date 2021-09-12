@@ -1,3 +1,4 @@
+from cnn import activations
 import cnn
 from cnn.layer import ConvolutionalLayer
 # from cnn.layer import PoolingLayer
@@ -8,6 +9,7 @@ model = cnn.Sequential()
 model.add(
     ConvolutionalLayer(
         input_shape=(3, 3),
+        activation="relu",
         padding=0,
         filter_count=3,
         kernel_shape=(2, 2),
