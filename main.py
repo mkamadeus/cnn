@@ -21,6 +21,7 @@ model.add(
 #         mode="max",
 #     )
 # )
+# TODO: this is a single instance input. How about multiple instances?
 result = model.run(
     inputs=np.array(
         [

@@ -47,7 +47,7 @@ class ConvolutionalLayer(BaseLayer):
                 ic(multiplied_views)
                 # ic(multiplied_views.shape)
 
-                # make feature map
+                # apply convolutional multiplication
                 conv_mult_res = np.array([[np.sum(view) for view in row] for row in multiplied_views])
                 ic(conv_mult_res)
 
