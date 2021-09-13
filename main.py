@@ -9,7 +9,7 @@ model.add(
     ConvolutionalLayer(
         input_shape=(3, 3, 3),
         padding=0,
-        filter_count=3,
+        filter_count=2,
         kernel_shape=(2, 2),
         stride=1,
     )
@@ -44,3 +44,4 @@ result = model.run(
     )
 )
 ic(result)
+ic(result.shape)

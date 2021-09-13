@@ -26,40 +26,45 @@ class ConvolutionalLayer(BaseLayer):
         # with shape of (n_channels, n_filter, w_kernel_shape, h_kernel_shape)
         self.kernels = generate_random_uniform_matrixes(self.filter_count, self.n_channels, self.kernel_shape)
         ic(self.kernels)
+        ic(self.kernels.shape)
 
     def run_convolution_stage(self, inputs: np.array):
         final_feature_maps = []
-        channel_num = 0
-        for input_channel in inputs:
-            # setup input
-            padded = pad_array(input_channel, self.padding, 1)
-            ic(padded)
+        filter_idx = 0
 
-            # a. k. a receptive fields
-            strided_views = generate_strides(padded, self.kernel_shape, stride=self.stride)
-            ic(strided_views)
+        for filter_kernels in self.kernels:
+            filter_feature_map = []
+            channel_idx = 0
+            ic(filter_kernels)
 
-            # for channel_kernels in self.kernels:
-            channel_feature_map = []
+            for input_channel in inputs:
+                # setup input
+                padded = pad_array(input_channel, self.padding, 0)
+                ic(padded)
 
-            for kernel in self.kernels[channel_num]:
-                multiplied_views = np.array([np.multiply(view, kernel) for view in strided_views])
+                # a. k. a receptive fields
+                strided_views = generate_strides(padded, self.kernel_shape, stride=self.stride)
+                ic(strided_views)
+
+                multiplied_views = np.array([np.multiply(view, filter_kernels[channel_idx]) for view in strided_views])
                 ic(multiplied_views)
-                # ic(multiplied_views.shape)
 
                 # apply convolutional multiplication
                 conv_mult_res = np.array([[np.sum(view) for view in row] for row in multiplied_views])
                 ic(conv_mult_res)
 
                 # save convolution multiplication to channel feature map
-                channel_feature_map.append(conv_mult_res)
+                filter_feature_map.append(conv_mult_res)
 
+                channel_idx += 1
+
+            ic(filter_feature_map)
             # Add all channel feature maps and then store on final feature
             # maps array
-            final_feature_maps.append(add_all_feature_maps(np.array(channel_feature_map)))
-
-            # increment channel num to move to next channel
-            channel_num += 1
+            final_feature_maps.append(add_all_feature_maps(np.array(filter_feature_map)))
+            ic(final_feature_maps)
+            # increment filter index to move to the next filter
+            filter_idx += 1
 
         return np.array(final_feature_maps)
 
