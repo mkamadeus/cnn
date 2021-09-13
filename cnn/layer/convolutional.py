@@ -25,6 +25,7 @@ class ConvolutionalLayer(BaseLayer):
         # uniformly create a 4D random matrix based on kernel shape
         # with shape of (n_channels, n_filter, w_kernel_shape, h_kernel_shape)
         self.kernels = generate_random_uniform_matrixes(self.filter_count, self.n_channels, self.kernel_shape)
+        self.type = "convolutional"
         ic(self.kernels)
 
     def run_convolution_stage(self, inputs: np.array):
@@ -71,3 +72,18 @@ class ConvolutionalLayer(BaseLayer):
             raise ValueError(f'The input shape is invalid. It should be {self.input_shape}.')
 
         return self.run_convolution_stage(inputs)
+
+    def get_shape(self, input_shape=None):
+        if(input_shape is None):
+            input_shape = self.input_shape
+        length = (input_shape[0] + 2 * self.padding - self.kernel_shape[0]) // self.stride + 1    
+        width = (input_shape[1] + 2 * self.padding - self.kernel_shape[1]) // self.stride + 1 
+        return (length, width, self.filter_count)
+
+    def get_weight_count(self):
+        kernels = self.kernels 
+        nb_feature_map = len(kernels)
+        nb_channel = len(kernels[0])
+        nb_filter_length = len(kernels[0][0])
+        nb_filter_width = len(kernels[0][0][0])
+        return nb_feature_map * ((nb_channel * nb_filter_length * nb_filter_width) + 1)
