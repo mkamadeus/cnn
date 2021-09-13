@@ -49,17 +49,13 @@ class ConvolutionalLayer(BaseLayer):
 
     def detector(self, feature_map: np.array):
         if self.activation == "relu":
-            relu_f = lambda x: relu(x)
-            relu_func = np.vectorize(relu_f, otypes=[np.float])
-            
-            ic(relu_func(feature_map))
-            return relu_func(feature_map)
+            act_f = lambda x: relu(x)
         elif self.activation == "sigmoid":
-            sig_f = lambda x: sigmoid(x)
-            sigmoid_func = np.vectorize(sig_f, otypes=[np.float])
-
-            ic(sigmoid_func(feature_map))
-            return sigmoid_func(feature_map)
+            act_f = lambda x: sigmoid(x)
+        
+        act_func = np.vectorize(act_f, otypes=[np.float])
+        ic(act_func(feature_map))
+        return act_func(feature_map)
 
 
     # TODO: multiple channels, multiple kernels
