@@ -18,16 +18,21 @@ class ConvolutionalLayer(BaseLayer):
         kernel_shape: Tuple[int, int],
         stride: int,
     ):
-        if len(input_shape) != 3:
-            raise TypeError("The input shape should be on 3D, which means the tuple should consists of 3 values.")
+        if len(input_shape) != 4:
+            raise TypeError("the input shape should be 4D")
+
         self.input_shape = input_shape
         self.padding = padding
         self.filter_count = filter_count
+
         if len(kernel_shape) != 2:
-            raise TypeError("The kernel shape should be 2D, which means the tuple should consists of 2 values.")
+            raise TypeError("the kernel shape should be 2D")
+
         self.kernel_shape = kernel_shape
         self.stride = stride
         self.n_channels = input_shape[0]
+
+        # TODO: bias confirm
         self.bias = 1
         self.bias_weight = 0
 
