@@ -43,4 +43,6 @@ def generate_random_uniform_matrixes(n_matrix: int, size: Tuple[int, int]):
     """
     Generates n random uniform matrixes from given kernel size
     """
-    return np.array([np.random.uniform(low=-1.0, high=1.0, size=size) for i in range(n_matrix)])
+    return np.array(
+        [np.random.uniform(low=-1.0, high=1.0, size=size) for i in range(n_matrix)]
+    )

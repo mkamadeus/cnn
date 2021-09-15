@@ -43,12 +43,12 @@ class ConvolutionalLayer:
         return feature_map
 
     def detector(self):
-        # Preparing the output of the ReLU activation function.  
-        relu_out = np.zeros(feature_map.shape)  
-        for map_num in range(feature_map.shape[-1]):  
-            for r in np.arange(0,feature_map.shape[0]):  
-                for c in np.arange(0, feature_map.shape[1]):  
-                    relu_out[r, c, map_num] = numpy.max(feature_map[r, c, map_num], 0) 
+        # Preparing the output of the ReLU activation function.
+        relu_out = np.zeros(feature_map.shape)
+        for map_num in range(feature_map.shape[-1]):
+            for r in np.arange(0, feature_map.shape[0]):
+                for c in np.arange(0, feature_map.shape[1]):
+                    relu_out[r, c, map_num] = numpy.max(feature_map[r, c, map_num], 0)
 
     def pooling(self):
         pass
