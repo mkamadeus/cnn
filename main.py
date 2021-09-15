@@ -1,6 +1,5 @@
 import cnn
-from cnn.layer import ConvolutionalLayer
-from cnn.layer import FlattenLayer
+from cnn.layer import ConvolutionalLayer, FlattenLayer, Detector
 import numpy as np
 from icecream import ic
 
@@ -12,6 +11,11 @@ model.add(
         filter_count=2,
         kernel_shape=(2, 2),
         stride=1,
+    )
+)
+model.add(
+    Detector(
+        activation="relu"
     )
 )
 model.add(
