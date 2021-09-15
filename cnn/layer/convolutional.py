@@ -22,7 +22,7 @@ class ConvolutionalLayer(BaseLayer):
         self.stride = stride
         self.n_channels = input_shape[0]
         self.bias = 1
-        self.bias_weight = 1
+        self.bias_weight = 0
 
         # uniformly create a 4D random matrix based on kernel shape
         # with shape of (n_channels, n_filter, w_kernel_shape, h_kernel_shape)
@@ -70,6 +70,8 @@ class ConvolutionalLayer(BaseLayer):
 
         bias_weight = self.bias*self.bias_weight
         return np.array(final_feature_maps)+bias_weight
+
+
 
     # TODO: adjust with pooling
     def run(self, inputs: np.array):

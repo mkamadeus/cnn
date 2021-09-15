@@ -1,6 +1,5 @@
 import cnn
-from cnn.layer import ConvolutionalLayer
-# from cnn.layer import PoolingLayer
+from cnn.layer import ConvolutionalLayer, FlattenLayer, Detector
 import numpy as np
 from icecream import ic
 
@@ -14,13 +13,16 @@ model.add(
         stride=1,
     )
 )
-# model.add(
-#     PoolingLayer(
-#         size=(2, 2),
-#         stride=1,
-#         mode="max",
-#     )
-# )
+model.add(
+    Detector(
+        activation="relu"
+    )
+)
+model.add(
+    FlattenLayer(
+        size=(2, 2)
+    )
+)
 # TODO: this is a single instance input. How about multiple instances?
 result = model.run(
     inputs=np.array(
