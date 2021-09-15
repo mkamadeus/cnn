@@ -35,3 +35,9 @@ class DenseLayer(BaseLayer):
         result = activation_func(result)
 
         return result
+
+    def get_shape(self, input_shape=None):
+        return (1, 1, self.size)
+
+    def get_weight_count(self):
+        return len(self.weights)

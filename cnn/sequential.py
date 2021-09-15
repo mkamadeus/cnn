@@ -15,7 +15,12 @@ class Sequential:
             result = layer.run(result)
         return result
 
-    def summary(self, input_shape=(10, 10, 10)):
+    def summary(self, input_shape=None):
+        if input_shape is None:
+            n_channel = len(self.inputs[0])
+            length = len(self.inputs[0][0]) 
+            width = len(self.inputs[0][0][0]) 
+            input_shape = (n_channel, length, width)
         total_weight = 0
         print(f"Model: {self.type}")
         print("----------------------------------------------------")
