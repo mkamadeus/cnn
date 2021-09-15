@@ -20,18 +20,23 @@ class PoolingLayer(BaseLayer):
         self.stride: int = stride
         self.mode: str = mode
 
-    # TODO: multiple channels, multiple kernels
+    def run_pooling(self, inputs):
+        result = []
+        for i in inputs:
+            # setup input
+            strided_views = generate_strides(i, self.size, stride=self.stride)
+            ic(strided_views)
+
+            # make feature map
+            if self.mode == "average":
+                feature_map = np.array([[np.average(view) for view in row] for row in strided_views])
+            elif self.mode == "max":
+                feature_map = np.array([[np.max(view) for view in row] for row in strided_views])
+
+            result.append(feature_map)
+            ic(feature_map)
+        return np.array(result)
+
     def run(self, inputs: np.array):
-        # setup input
-        strided_views = generate_strides(inputs, self.size, stride=self.stride)
-        ic(strided_views)
-
-        # make feature map
-        if self.mode == "average":
-            feature_map = np.array([[np.average(view) for view in row] for row in strided_views])
-        elif self.mode == "max":
-            feature_map = np.array([[np.max(view) for view in row] for row in strided_views])
-
-        ic(feature_map)
-
-        return feature_map
+        res = self.run_pooling(inputs)
+        return res

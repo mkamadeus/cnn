@@ -10,14 +10,21 @@ class ConvolutionalLayer(BaseLayer):
     Defines a convolutional layer consisting of inputs and kernels.
     """
 
-    def __init__(self, input_shape: Tuple[int, int, int], padding: int, filter_count: int, kernel_shape: Tuple[int, int], stride: int):
-        if (len(input_shape) != 3):
-            raise TypeError('The input shape should be on 3D, which means the tuple should consists of 3 values.')
+    def __init__(
+        self,
+        input_shape: Tuple[int, int, int],
+        padding: int,
+        filter_count: int,
+        kernel_shape: Tuple[int, int],
+        stride: int,
+    ):
+        if len(input_shape) != 3:
+            raise TypeError("The input shape should be on 3D, which means the tuple should consists of 3 values.")
         self.input_shape = input_shape
         self.padding = padding
         self.filter_count = filter_count
-        if (len(kernel_shape) != 2):
-            raise TypeError('The kernel shape should be 2D, which means the tuple should consists of 2 values.')
+        if len(kernel_shape) != 2:
+            raise TypeError("The kernel shape should be 2D, which means the tuple should consists of 2 values.")
         self.kernel_shape = kernel_shape
         self.stride = stride
         self.n_channels = input_shape[0]
@@ -68,8 +75,8 @@ class ConvolutionalLayer(BaseLayer):
             # increment filter index to move to the next filter
             filter_idx += 1
 
-        bias_weight = self.bias*self.bias_weight
-        return np.array(final_feature_maps)+bias_weight
+        bias_weight = self.bias * self.bias_weight
+        return np.array(final_feature_maps) + bias_weight
 
 
 
@@ -77,7 +84,7 @@ class ConvolutionalLayer(BaseLayer):
     def run(self, inputs: np.array):
         # Handling error of input
         # If number of channels of input is inequal
-        if (inputs.shape != self.input_shape):
-            raise ValueError(f'The input shape is invalid. It should be {self.input_shape}.')
+        if inputs.shape != self.input_shape:
+            raise ValueError(f"The input shape is invalid. It should be {self.input_shape}.")
 
         return self.run_convolution_stage(inputs)

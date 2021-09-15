@@ -27,7 +27,7 @@ class DenseLayer(BaseLayer):
             activation_func = softmax(inputs)
         else:
             raise Exception("invalid activation mode")
-            
+
         # add bias to input
         biased_input: np.ndarray = np.insert(inputs, 0, 1)
 
