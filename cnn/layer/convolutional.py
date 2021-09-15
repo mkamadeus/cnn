@@ -68,7 +68,7 @@ class ConvolutionalLayer(BaseLayer):
             # increment filter index to move to the next filter
             filter_idx += 1
 
-        bias_weight = self.bias*self.bias_weight
+        bias_weight = self.bias * self.bias_weight
         return np.array(final_feature_maps)+bias_weight
 
     # TODO: adjust with pooling
