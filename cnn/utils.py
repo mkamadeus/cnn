@@ -37,3 +37,29 @@ def generate_strides(mat: np.array, kernel_size: Tuple[int, int], stride: int = 
     result = as_strided(mat, strides=view_strides, shape=view_shape)[::stride, ::stride]
 
     return result
+
+
+def generate_random_uniform_matrixes(
+    n_filter: int, n_channel: int, size: Tuple[int, int]
+):
+    """
+    Generates n random uniform matrixes from given kernel size
+    """
+    return np.array(
+        [
+            [np.random.uniform(low=-1.0, high=1.0, size=size) for i in range(n_channel)]
+            for i in range(n_filter)
+        ]
+    )
+
+
+def add_all_feature_maps(feature_map_arr: np.array):
+    """
+    Element-wise add all feature maps of channel
+    """
+    # Only take the shape of feature map single layer
+    res = np.zeros((feature_map_arr.shape[1], feature_map_arr.shape[2]))
+    for feature_map in feature_map_arr:
+        np.add(res, feature_map, out=res)
+
+    return res

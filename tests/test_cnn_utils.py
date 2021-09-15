@@ -1,6 +1,11 @@
 import unittest
 import numpy as np
-from cnn.utils import generate_strides, pad_array
+from cnn.utils import (
+    generate_strides,
+    pad_array,
+    generate_random_uniform_matrixes,
+    add_all_feature_maps,
+)
 from numpy.testing import assert_array_equal
 
 
@@ -138,4 +143,33 @@ class TestCNNUtils(unittest.TestCase):
                 ],
             ]
         )
+        self.assertIsNone(assert_array_equal(result, expected))
+
+    def test_generate_random_matrixes_1(self):
+        # makes 2x2 random kernel matrix
+        # for a conv layer with 3 filters and 3 channels
+        n_filter = 3
+        n_channel = 3
+        size = (2, 2)
+
+        result = generate_random_uniform_matrixes(n_filter, n_channel, size)
+
+        self.assertEqual(result.shape, (3, 3, 2, 2))
+        self.assertTrue(result.min() >= -1.0)
+        self.assertTrue(result.max() <= 1.0)
+
+    def test_add_all_feature_maps(self):
+        feature_map_arr = np.array(
+            [[[0, 1], [3, 4]], [[5, 6], [7, 8]], [[9, 10], [11, 12]]]
+        )
+
+        expected = np.array(
+            [
+                [14, 17],
+                [21, 24],
+            ]
+        )
+
+        result = add_all_feature_maps(feature_map_arr)
+
         self.assertIsNone(assert_array_equal(result, expected))
