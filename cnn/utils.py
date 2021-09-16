@@ -47,8 +47,8 @@ def generate_random_uniform_matrixes(
     """
     return np.array(
         [
-            [np.random.uniform(low=-1.0, high=1.0, size=size) for i in range(n_channel)]
-            for i in range(n_filter)
+            [np.random.uniform(low=-1.0, high=1.0, size=size) for _ in range(n_channel)]
+            for _ in range(n_filter)
         ]
     )
 

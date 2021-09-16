@@ -1,5 +1,5 @@
 test:
-	python -m unittest tests/test_*.py -v
+	pytest
 .PHONY: test
 
 format:
@@ -7,5 +7,6 @@ format:
 .PHONY: format
 
 lint:
+	flake8 .
 	black ./**/*.py --check --exclude env/
 .PHONY: lint

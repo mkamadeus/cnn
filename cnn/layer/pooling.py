@@ -1,13 +1,12 @@
 import numpy as np
-from cnn.utils import generate_strides, pad_array
+from cnn.utils import generate_strides
 from typing import Tuple
 from cnn.layer.base import BaseLayer
-from icecream import ic
 
 POOLING_MODES = ["max", "average"]
 
 
-class PoolingLayer(BaseLayer):
+class Pooling(BaseLayer):
     """
     Defines a pooling layer consisting of inputs and kernels.
     """
@@ -20,18 +19,21 @@ class PoolingLayer(BaseLayer):
         self.stride: int = stride
         self.mode: str = mode
 
-    # TODO: multiple channels, multiple kernels
+    def run_pooling(self, inputs):
+        result = []
+        for i in inputs:
+            # setup input
+            strided_views = generate_strides(i, self.size, stride=self.stride)
+
+            # make feature map
+            if self.mode == "average":
+                feature_map = np.array([[np.average(view) for view in row] for row in strided_views])
+            elif self.mode == "max":
+                feature_map = np.array([[np.max(view) for view in row] for row in strided_views])
+
+            result.append(feature_map)
+        return np.array(result)
+
     def run(self, inputs: np.array):
-        # setup input
-        strided_views = generate_strides(inputs, self.size, stride=self.stride)
-        ic(strided_views)
-
-        # make feature map
-        if self.mode == "average":
-            feature_map = np.array([[np.average(view) for view in row] for row in strided_views])
-        elif self.mode == "max":
-            feature_map = np.array([[np.max(view) for view in row] for row in strided_views])
-
-        ic(feature_map)
-
-        return feature_map
+        res = self.run_pooling(inputs)
+        return res

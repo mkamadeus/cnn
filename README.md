@@ -23,3 +23,7 @@ source env/bin/activate # in Windows systems, run `.\env\Scripts\activate`
 ```bash
 make test 
 ```
+
+## Technical Details
+
+- `(n_input, n_channel, w_kernel, h_kernel)` is the shape for the input.

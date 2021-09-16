@@ -9,6 +9,14 @@ def sigmoid_derivative(x):
     return x * (1 - x)
 
 
+def linear(x):
+    return x
+
+
+def linear_derivative(x):
+    return 1
+
+
 def relu(x):
     return max(0, x)
 

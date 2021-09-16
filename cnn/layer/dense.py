@@ -5,7 +5,7 @@ from cnn.layer.base import BaseLayer
 ACTIVATION_MODES = ["relu", "sigmoid", "softmax"]
 
 
-class DenseLayer(BaseLayer):
+class Dense(BaseLayer):
     """
     Defines a pooling layer consisting of inputs and kernels.
     """
@@ -27,7 +27,7 @@ class DenseLayer(BaseLayer):
             activation_func = softmax(inputs)
         else:
             raise Exception("invalid activation mode")
-            
+
         # add bias to input
         biased_input: np.ndarray = np.insert(inputs, 0, 1)
 
