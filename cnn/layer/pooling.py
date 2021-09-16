@@ -1,5 +1,5 @@
 import numpy as np
-from cnn.utils import generate_strides, pad_array
+from cnn.utils import generate_strides
 from typing import Tuple
 from cnn.layer.base import BaseLayer
 from icecream import ic
@@ -41,16 +41,15 @@ class PoolingLayer(BaseLayer):
         if input_shape is None:
             # TODO: change with commented one when already fixed with multiple data image as inputs
             # n_channel = len(self.inputs[0])
-            # length = len(self.inputs[0][0]) 
-            # width = len(self.inputs[0][0][0]) 
+            # length = len(self.inputs[0][0])
+            # width = len(self.inputs[0][0][0])
             n_channel = len(self.inputs)
-            length = len(self.inputs[0]) 
-            width = len(self.inputs[0][0]) 
+            length = len(self.inputs[0])
+            width = len(self.inputs[0][0])
             input_shape = (n_channel, length, width)
-        length = (input_shape[1] - self.size[0]) // self.stride + 1    
-        width = (input_shape[2] - self.size[1]) // self.stride + 1 
+        length = (input_shape[1] - self.size[0]) // self.stride + 1
+        width = (input_shape[2] - self.size[1]) // self.stride + 1
         return (input_shape[0], length, width)
 
     def get_weight_count(self):
         return 0
-    

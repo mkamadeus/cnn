@@ -76,12 +76,12 @@ class ConvolutionalLayer(BaseLayer):
     def get_shape(self, input_shape=None):
         if(input_shape is None):
             input_shape = self.input_shape
-        length = (input_shape[1] + 2 * self.padding - self.kernel_shape[0]) // self.stride + 1    
-        width = (input_shape[2] + 2 * self.padding - self.kernel_shape[1]) // self.stride + 1 
+        length = (input_shape[1] + 2 * self.padding - self.kernel_shape[0]) // self.stride + 1
+        width = (input_shape[2] + 2 * self.padding - self.kernel_shape[1]) // self.stride + 1
         return (self.filter_count, length, width)
 
     def get_weight_count(self):
-        kernels = self.kernels 
+        kernels = self.kernels
         nb_feature_map = len(kernels)
         nb_channel = len(kernels[0])
         nb_filter_length = len(kernels[0][0])

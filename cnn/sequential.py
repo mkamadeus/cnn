@@ -21,11 +21,11 @@ class Sequential:
         if input_shape is None:
             # TODO: change with commented one when already fixed with multiple data image as inputs
             # n_channel = len(self.inputs[0])
-            # length = len(self.inputs[0][0]) 
-            # width = len(self.inputs[0][0][0]) 
+            # length = len(self.inputs[0][0])
+            # width = len(self.inputs[0][0][0])
             n_channel = len(self.inputs)
-            length = len(self.inputs[0]) 
-            width = len(self.inputs[0][0]) 
+            length = len(self.inputs[0])
+            width = len(self.inputs[0][0])
             input_shape = (n_channel, length, width)
         total_weight = 0
         print(f"Model: {self.type}")
@@ -38,7 +38,7 @@ class Sequential:
             total_weight += layer_weight
             print(f"{layer_type}        {layer_shape}                 {layer_weight}")
             if index != len(self.layers) - 1:
-                print("----------------------------------------------------") 
+                print("----------------------------------------------------")
             input_shape = layer_shape
         print("====================================================")
         print(f"Total param/weight: {total_weight}")
