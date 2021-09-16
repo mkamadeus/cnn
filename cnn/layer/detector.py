@@ -25,5 +25,5 @@ class Detector(BaseLayer):
         elif self.activation == "linear":
             act_f = linear
 
-        act_func = np.vectorize(act_f, otypes=[np.float])
+        act_func = np.vectorize(act_f, otypes=[float])
         return act_func(inputs)
