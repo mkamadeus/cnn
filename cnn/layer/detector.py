@@ -1,8 +1,8 @@
 import numpy as np
-# from cnn.utils import generate_strides, pad_array
-from cnn.activations import relu, sigmoid
+from cnn.activations import linear, relu, sigmoid
 from cnn.layer.base import BaseLayer
-from icecream import ic
+
+DETECTOR_MODES = ["relu", "sigmoid", "linear"]
 
 
 class Detector(BaseLayer):
@@ -11,15 +11,19 @@ class Detector(BaseLayer):
     """
 
     def __init__(self, activation: str):
+        if activation not in DETECTOR_MODES:
+            raise ValueError("invalid activation mode")
+
         self.activation = activation
 
     # TODO: multiple channels, multiple kernels
     def run(self, inputs: np.array):
         if self.activation == "relu":
-            act_f = lambda x: relu(x)
+            act_f = relu
         elif self.activation == "sigmoid":
-            act_f = lambda x: sigmoid(x)
-        
+            act_f = sigmoid
+        elif self.activation == "linear":
+            act_f = linear
+
         act_func = np.vectorize(act_f, otypes=[np.float])
-        ic(act_func(inputs))
         return act_func(inputs)

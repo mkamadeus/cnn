@@ -1,8 +1,7 @@
 import numpy as np
-from cnn.utils import generate_strides, pad_array
+from cnn.utils import generate_strides
 from typing import Tuple
 from cnn.layer.base import BaseLayer
-from icecream import ic
 
 POOLING_MODES = ["max", "average"]
 
@@ -25,7 +24,6 @@ class PoolingLayer(BaseLayer):
         for i in inputs:
             # setup input
             strided_views = generate_strides(i, self.size, stride=self.stride)
-            ic(strided_views)
 
             # make feature map
             if self.mode == "average":
@@ -34,7 +32,6 @@ class PoolingLayer(BaseLayer):
                 feature_map = np.array([[np.max(view) for view in row] for row in strided_views])
 
             result.append(feature_map)
-            ic(feature_map)
         return np.array(result)
 
     def run(self, inputs: np.array):

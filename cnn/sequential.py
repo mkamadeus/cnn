@@ -1,5 +1,7 @@
 from typing import List
 from cnn.layer.base import BaseLayer
+from icecream import ic
+import numpy as np
 
 
 class Sequential:
@@ -10,10 +12,19 @@ class Sequential:
         self.layers.append(layer)
 
     def run(self, inputs):
-        result = inputs
-        for layer in self.layers:
-            result = layer.run(result)
-        return result
+
+        ic(inputs.shape)
+
+        final_result = []
+
+        for i in inputs:
+            result = i
+            for idx, layer in enumerate(self.layers):
+                ic(idx, result.shape, result)
+                result = layer.run(result)
+            final_result.append(result)
+
+        return np.array(final_result)
 
     def summary(self):
         print(f"model {self.layers}")
