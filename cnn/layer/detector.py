@@ -28,9 +28,3 @@ class Detector(BaseLayer):
 
         act_func = np.vectorize(act_f, otypes=[np.float])
         return act_func(inputs)
-
-    def get_shape(self, input_shape=None):
-        return input_shape
-
-    def get_weight_count(self):
-        return 0

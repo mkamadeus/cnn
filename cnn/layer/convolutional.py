@@ -97,7 +97,7 @@ class Convolutional(BaseLayer):
         return self.run_convolution_stage(inputs)
 
     def get_shape(self, input_shape=None):
-        if(input_shape is None):
+        if input_shape is None:
             input_shape = self.input_shape
         length = (input_shape[1] + 2 * self.padding - self.kernel_shape[0]) // self.stride + 1
         width = (input_shape[2] + 2 * self.padding - self.kernel_shape[1]) // self.stride + 1

@@ -36,17 +36,10 @@ class Pooling(BaseLayer):
         return np.array(result)
 
     def get_shape(self, input_shape=None):
-        if input_shape is None:
-            n_channel = len(self.inputs[0])
-            length = len(self.inputs[0][0])
-            width = len(self.inputs[0][0][0])
-            input_shape = (n_channel, length, width)
+        input_shape = super().get_shape(input_shape)
         length = (input_shape[1] - self.size[0]) // self.stride + 1
         width = (input_shape[2] - self.size[1]) // self.stride + 1
         return (input_shape[0], length, width)
-
-    def get_weight_count(self):
-        return 0
 
     def run(self, inputs: np.array):
         res = self.run_pooling(inputs)

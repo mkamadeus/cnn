@@ -19,8 +19,6 @@ class Flatten(BaseLayer):
         flatten_output = inputs.flatten()
         return flatten_output
 
-    def get_shape(self, input_shape):
-        return input_shape
-
-    def get_weight_count(self):
-        return 0
+    def get_shape(self, input_shape=None):
+        input_shape = super().get_shape(input_shape)
+        return (1, 1, input_shape[0] * input_shape[1] * input_shape[2])
