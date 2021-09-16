@@ -16,6 +16,7 @@ class PoolingLayer(BaseLayer):
         if mode not in POOLING_MODES:
             raise Exception("invalid pooling mode")
 
+        self.type = "pooling"
         self.size: Tuple[int, int] = size
         self.stride: int = stride
         self.mode: str = mode
@@ -38,9 +39,13 @@ class PoolingLayer(BaseLayer):
 
     def get_shape(self, input_shape=None):
         if input_shape is None:
-            n_channel = len(self.inputs[0])
-            length = len(self.inputs[0][0]) 
-            width = len(self.inputs[0][0][0]) 
+            # TODO: change with commented one when already fixed with multiple data image as inputs
+            # n_channel = len(self.inputs[0])
+            # length = len(self.inputs[0][0]) 
+            # width = len(self.inputs[0][0][0]) 
+            n_channel = len(self.inputs)
+            length = len(self.inputs[0]) 
+            width = len(self.inputs[0][0]) 
             input_shape = (n_channel, length, width)
         length = (input_shape[1] - self.size[0]) // self.stride + 1    
         width = (input_shape[2] - self.size[1]) // self.stride + 1 

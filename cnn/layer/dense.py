@@ -14,6 +14,7 @@ class DenseLayer(BaseLayer):
         if activation not in ACTIVATION_MODES:
             raise Exception("invalid pooling mode")
 
+        self.type = "dense"
         self.size: int = size
         self.weights = weights
         self.activation = activation

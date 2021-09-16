@@ -43,4 +43,6 @@ result = model.run(
         ]
     )
 )
+
+model.summary()
 ic(result)
