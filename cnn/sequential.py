@@ -1,5 +1,7 @@
 from typing import List
 from cnn.layer.base import BaseLayer
+from icecream import ic
+import numpy as np
 
 
 class Sequential:
@@ -11,21 +13,26 @@ class Sequential:
         self.layers.append(layer)
 
     def run(self, inputs):
+
+        ic(inputs.shape)
+
         self.inputs = inputs
-        result = inputs
-        for layer in self.layers:
-            result = layer.run(result)
-        return result
+        final_result = []
+
+        for i in inputs:
+            result = i
+            for idx, layer in enumerate(self.layers):
+                ic(idx, result.shape, result)
+                result = layer.run(result)
+            final_result.append(result)
+
+        return np.array(final_result)
 
     def summary(self, input_shape=None):
         if input_shape is None:
-            # TODO: change with commented one when already fixed with multiple data image as inputs
-            # n_channel = len(self.inputs[0])
-            # length = len(self.inputs[0][0])
-            # width = len(self.inputs[0][0][0])
-            n_channel = len(self.inputs)
-            length = len(self.inputs[0])
-            width = len(self.inputs[0][0])
+            n_channel = len(self.inputs[0])
+            length = len(self.inputs[0][0])
+            width = len(self.inputs[0][0][0])
             input_shape = (n_channel, length, width)
         total_weight = 0
         print(f"Model: {self.type}")

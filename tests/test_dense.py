@@ -1,9 +1,9 @@
 import numpy as np
-from cnn.layer import DenseLayer
+from cnn.layer import Dense
 
 
 def test_dense():
-    layer = DenseLayer(
+    layer = Dense(
         size=3,
         weights=np.array(
             [
