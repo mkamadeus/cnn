@@ -1,4 +1,12 @@
-from cnn.activations import sigmoid, sigmoid_derivative, linear, linear_derivative, relu, relu_derivative, softmax
+from cnn.activations import (
+    sigmoid,
+    sigmoid_derivative,
+    linear,
+    linear_derivative,
+    relu,
+    relu_derivative,
+    softmax,
+)
 import numpy as np
 
 
