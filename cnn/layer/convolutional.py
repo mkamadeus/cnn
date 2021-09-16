@@ -40,7 +40,9 @@ class Convolutional(BaseLayer):
         # uniformly create a 4D random matrix based on kernel shape if no kernel is supplied
         # with shape of (n_channels, n_filter, w_kernel_shape, h_kernel_shape)
         if filters is None:
-            self.filters = np.array(generate_random_uniform_matrixes(self.filter_count, self.n_channels, self.kernel_shape))
+            self.filters = np.array(
+                generate_random_uniform_matrixes(self.filter_count, self.n_channels, self.kernel_shape)
+            )
         else:
             self.filters = filters
         ic(self.filters.shape)
@@ -69,8 +71,6 @@ class Convolutional(BaseLayer):
 
                 # save convolution multiplication to channel feature map
                 feature_map.append(conv_mult_res)
-
-                channel_idx += 1
 
             # convert to np.array
             feature_map = np.array(feature_map)

@@ -1,5 +1,5 @@
 test:
-	python -m unittest tests/test_*.py -v
+	pytest
 .PHONY: test
 
 format:
