@@ -12,5 +12,9 @@
   "editor.tabSize": 4,
   "python.linting.flake8Enabled": true,
   "python.linting.enabled": true,
-  "json.format.enable": false
+  "json.format.enable": false,
+  "files.exclude": {
+    "**/__pycache__": true,
+    "**/.pytest_cache": true
+  }
 }

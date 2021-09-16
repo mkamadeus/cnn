@@ -5,7 +5,7 @@ from typing import Tuple
 from cnn.layer.base import BaseLayer
 
 
-class FlattenLayer(BaseLayer):
+class Flatten(BaseLayer):
     """
     Defines a flatten layer consisting of inputs and kernels.
     """

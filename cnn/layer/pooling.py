@@ -6,7 +6,7 @@ from cnn.layer.base import BaseLayer
 POOLING_MODES = ["max", "average"]
 
 
-class PoolingLayer(BaseLayer):
+class Pooling(BaseLayer):
     """
     Defines a pooling layer consisting of inputs and kernels.
     """

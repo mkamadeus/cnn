@@ -7,5 +7,6 @@ format:
 .PHONY: format
 
 lint:
+	flake8 .
 	black ./**/*.py --check --exclude env/
 .PHONY: lint

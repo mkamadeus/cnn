@@ -5,7 +5,7 @@ from typing import Tuple
 from icecream import ic
 
 
-class ConvolutionalLayer(BaseLayer):
+class Convolutional(BaseLayer):
     """
     Defines a convolutional layer consisting of inputs and kernels.
     """

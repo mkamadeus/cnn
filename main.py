@@ -1,6 +1,5 @@
 from cnn import Sequential
-from cnn.layer.pooling import PoolingLayer
-from cnn.layer import ConvolutionalLayer, FlattenLayer, Detector
+from cnn.layer import Convolutional, Detector, Pooling, Flatten
 from icecream import ic
 import json
 import numpy as np
@@ -19,11 +18,11 @@ with open("input/kernel.json", "r") as f:
 # sequential model
 model = Sequential()
 model.add(
-    ConvolutionalLayer(input_shape=(3, 3, 3), padding=0, filter_count=2, kernel_shape=(2, 2), stride=1, filters=filters)
+    Convolutional(input_shape=(3, 3, 3), padding=0, filter_count=2, kernel_shape=(2, 2), stride=1, filters=filters)
 )
 model.add(Detector(activation="linear"))
-# model.add(PoolingLayer(size=(2, 2), stride=1))
-# model.add(FlattenLayer(size=(2, 2)))
+model.add(Pooling(size=(2, 2), stride=1))
+model.add(Flatten(size=(2, 2)))
 
 
 # TODO: this is a single instance input. How about multiple instances?

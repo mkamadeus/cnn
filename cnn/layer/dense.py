@@ -5,7 +5,7 @@ from cnn.layer.base import BaseLayer
 ACTIVATION_MODES = ["relu", "sigmoid", "softmax"]
 
 
-class DenseLayer(BaseLayer):
+class Dense(BaseLayer):
     """
     Defines a pooling layer consisting of inputs and kernels.
     """
