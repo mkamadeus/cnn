@@ -16,13 +16,31 @@ class Sequential:
             self.layers = layers
 
     def add(self, layer: BaseLayer):
+        """
+        Adds a new layer to the sequential model.
+        """
         self.layers.append(layer)
 
-    def run(self, inputs):
+    def stochastic_run(self, inputs: np.ndarray, targets: np.ndarray):
+        """
+        Runs a stochastic process (update per one input)
+        """
+        for input_data in inputs:
+            self.forward_phase(input_data)
+            self.backward_phase(targets)
+            self.update
 
-        ic(inputs.shape)
+    def batch_run(self, inputs: np.ndarray, targets: np.ndarray):
+        """
+        Runs a batch process (update per one batch/all input)
+        """
+        pass
 
+    def mini_batch_run(self, inputs: np.ndarray, targets: np.ndarray):
+        pass
         self.inputs = inputs
+
+    def run(self, inputs):
         final_result = []
 
         for i in tqdm(inputs):
@@ -80,3 +98,15 @@ class Sequential:
             input_shape = layer_shape
         print("====================================================")
         print(f"Total param/weight: {total_weight}")
+
+    def forward_phase(self, input_data: np.ndarray):
+        current_output = input_data
+        for layer in self.layers:
+            current_output = layer.run(current_output)
+        self.outputs = current_output
+
+    def backward_phase(self):
+        pass
+
+    def update_parameters(self):
+        pass
