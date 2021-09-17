@@ -5,12 +5,12 @@ import json
 import numpy as np
 
 # load inputs
-with open("data/01/inputs.json", "r") as f:
+with open("data/multiple_inputs/01/inputs.json", "r") as f:
     inputs = np.array(json.loads(f.read()))
     ic(inputs)
     ic(inputs.shape)
 
-with open("data/01/kernel.json", "r") as f:
+with open("data/multiple_inputs/01/kernel.json", "r") as f:
     filters = np.array(json.loads(f.read()))
     ic(filters)
     ic(filters.shape)
