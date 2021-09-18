@@ -13,6 +13,7 @@ def linear(x):
     return x
 
 
+# TO-DO: the x is array-like input
 def linear_derivative(x):
     return 1
 
@@ -21,8 +22,9 @@ def relu(x):
     return np.maximum(0, x)
 
 
+# TO-DO: the x is array-like input
 def relu_derivative(x):
-    return 1 if np.any(x) > 0 else 0
+    return 1 if x > 0 else 0
 
 
 def softmax(layer):
