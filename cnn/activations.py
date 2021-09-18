@@ -18,11 +18,11 @@ def linear_derivative(x):
 
 
 def relu(x):
-    return max(0, x)
+    return np.maximum(0, x)
 
 
 def relu_derivative(x):
-    return 1 if x > 0 else 0
+    return 1 if np.any(x) > 0 else 0
 
 
 def softmax(layer):

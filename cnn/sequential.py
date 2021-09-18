@@ -22,6 +22,7 @@ class Sequential:
             for idx, layer in enumerate(self.layers):
                 ic(idx, result.shape, result)
                 result = layer.run(result)
+                ic(idx, result.shape, result)
             final_result.append(result)
 
         return np.array(final_result)

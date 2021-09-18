@@ -45,11 +45,12 @@ class Convolutional(BaseLayer):
             )
         else:
             self.filters = filters
-        ic(self.filters.shape)
 
         # TODO: bias confirm
         self.bias = 1
         self.bias_weight = 0
+
+        ic(self.input_shape)
 
     def run_convolution_stage(self, inputs: np.array):
         final_feature_maps = []
@@ -90,6 +91,7 @@ class Convolutional(BaseLayer):
     def run(self, inputs: np.array):
         # Handling error of input
         # If number of channels of input is inequal
+        ic(inputs, self.kernel_shape)
         if inputs.shape != self.input_shape:
             raise ValueError(f"input shape mismatch, found {inputs.shape} should be {self.input_shape}.")
 
