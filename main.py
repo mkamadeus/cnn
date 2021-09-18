@@ -28,5 +28,6 @@ model.add(Flatten(size=(2, 2)))
 # TODO: this is a single instance input. How about multiple instances?
 
 result = model.run(inputs=inputs)
+model.summary()
 ic(result)
 ic(result.shape)
