@@ -1,6 +1,5 @@
 import numpy as np
 from cnn.layer.base import BaseLayer
-from typing import Tuple
 
 
 class Flatten(BaseLayer):
@@ -8,8 +7,7 @@ class Flatten(BaseLayer):
     Defines a flatten layer consisting of inputs and kernels.
     """
 
-    def __init__(self, size):
-        self.size: Tuple[int, int] = size
+    def __init__(self):
         self.type = "flatten      "
 
     def run(self, inputs: np.array):
