@@ -18,6 +18,7 @@ class Pooling(BaseLayer):
         self.size: Tuple[int, int] = size
         self.stride: int = stride
         self.mode: str = mode
+        self.type = "pooling      "
 
     def run_pooling(self, inputs):
         result = []
@@ -33,6 +34,12 @@ class Pooling(BaseLayer):
 
             result.append(feature_map)
         return np.array(result)
+
+    def get_shape(self, input_shape=None):
+        input_shape = super().get_shape(input_shape)
+        length = (input_shape[1] - self.size[0]) // self.stride + 1
+        width = (input_shape[2] - self.size[1]) // self.stride + 1
+        return (input_shape[0], length, width)
 
     def run(self, inputs: np.array):
         res = self.run_pooling(inputs)

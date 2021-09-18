@@ -35,7 +35,7 @@ def test_sigmoid_derivative_2():
     result = sigmoid_derivative(np.array([0.1, 0.2, 0.3, 0.4, 0.5]))
     expected = np.array([0.09, 0.16, 0.21, 0.24, 0.25])
 
-    assert np.testing.assert_array_equal(result, expected) is None
+    assert np.testing.assert_array_almost_equal(result, expected) is None
 
 
 def test_linear():

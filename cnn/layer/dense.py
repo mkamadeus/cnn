@@ -15,6 +15,7 @@ class Dense(BaseLayer):
         if activation not in ACTIVATION_MODES:
             raise Exception("invalid pooling mode")
 
+        self.type = "dense"
         self.size: int = size
         self.weights = weights
         self.activation = activation
@@ -40,3 +41,9 @@ class Dense(BaseLayer):
         ic(result)
 
         return result
+
+    def get_shape(self, input_shape=None):
+        return (1, 1, self.size)
+
+    def get_weight_count(self):
+        return len(self.weights)

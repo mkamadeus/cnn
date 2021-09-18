@@ -49,6 +49,7 @@ class Convolutional(BaseLayer):
         # TODO: bias confirm
         self.bias = 1
         self.bias_weight = 0
+        self.type = "convolutional"
 
         ic(self.input_shape)
 
@@ -96,3 +97,15 @@ class Convolutional(BaseLayer):
             raise ValueError(f"input shape mismatch, found {inputs.shape} should be {self.input_shape}.")
 
         return self.run_convolution_stage(inputs)
+
+    def get_shape(self, input_shape=None):
+        if input_shape is None:
+            input_shape = self.input_shape
+        length = (input_shape[1] + 2 * self.padding - self.kernel_shape[0]) // self.stride + 1
+        width = (input_shape[2] + 2 * self.padding - self.kernel_shape[1]) // self.stride + 1
+        return (self.filter_count, length, width)
+
+    def get_weight_count(self):
+        nb_feature_map = len(self.filters)
+        nb_channel = len(self.filters[0])
+        return nb_feature_map * ((nb_channel * self.kernel_shape[0] * self.kernel_shape[1]) + 1)
