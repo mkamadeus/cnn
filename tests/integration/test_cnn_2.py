@@ -25,8 +25,8 @@ def test_cnn_2():
 
     assert inputs.shape == (1, 1, 5, 5)
     assert filters.shape == (2, 1, 3, 3)
-    assert weights_1.shape == (2, 3)
-    assert weights_2.shape == (10, 3)
+    assert weights_1.shape == (3, 2)
+    assert weights_2.shape == (3, 10)
 
     model = Sequential()
     model.add(
