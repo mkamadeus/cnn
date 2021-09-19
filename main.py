@@ -22,7 +22,7 @@ model.add(
 )
 model.add(Detector(activation="linear"))
 model.add(Pooling(size=(2, 2), stride=1))
-model.add(Flatten(size=(2, 2)))
+model.add(Flatten())
 
 
 # TODO: this is a single instance input. How about multiple instances?
