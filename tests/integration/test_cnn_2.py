@@ -28,8 +28,8 @@ def test_cnn_2():
     assert weights_1.shape == (3, 2)
     assert weights_2.shape == (3, 10)
 
-    model = Sequential()
-    model.add(
+    model_2 = Sequential()
+    model_2.add(
         Convolutional(
             input_shape=(1, 5, 5),
             padding=0,
@@ -39,11 +39,11 @@ def test_cnn_2():
             filters=filters,
         )
     )
-    model.add(Detector(activation="relu"))
-    model.add(Pooling(size=(3, 3), mode="max", stride=1))
-    model.add(Flatten())
-    model.add(Dense(size=2, weights=weights_1, activation="relu"))
-    model.add(Dense(size=2, weights=weights_2, activation="softmax"))
-    result = model.run(inputs=inputs)
+    model_2.add(Detector(activation="relu"))
+    model_2.add(Pooling(size=(3, 3), mode="max", stride=1))
+    model_2.add(Flatten())
+    model_2.add(Dense(size=2, weights=weights_1, activation="relu"))
+    model_2.add(Dense(size=2, weights=weights_2, activation="softmax"))
+    result = model_2.run(inputs=inputs)
 
     assert np.testing.assert_array_almost_equal(result, expected) is None

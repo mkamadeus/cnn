@@ -19,8 +19,8 @@ def test_cnn_1():
     assert inputs.shape == (1, 3, 3, 3)
     assert filters.shape == (2, 3, 2, 2)
 
-    model = Sequential()
-    model.add(
+    model_1 = Sequential()
+    model_1.add(
         Convolutional(
             input_shape=(3, 3, 3),
             padding=0,
@@ -30,7 +30,7 @@ def test_cnn_1():
             filters=filters,
         )
     )
-    model.add(Detector(activation="linear"))
-    result = model.run(inputs=inputs)
+    model_1.add(Detector(activation="linear"))
+    result = model_1.run(inputs=inputs)
 
     assert np.testing.assert_array_equal(result, expected) is None

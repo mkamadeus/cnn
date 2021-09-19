@@ -5,9 +5,12 @@ import numpy as np
 
 
 class Sequential:
-    def __init__(self, layers: List[BaseLayer] = []):
+    def __init__(self, layers: List[BaseLayer] = None):
         self.type = "Sequential"
-        self.layers = layers
+        if layers is None:
+            self.layers = []
+        else:
+            self.layers = layers
 
     def add(self, layer: BaseLayer):
         self.layers.append(layer)
