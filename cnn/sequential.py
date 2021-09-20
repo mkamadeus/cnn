@@ -1,7 +1,12 @@
 from typing import List
+
+from numpy.core.fromnumeric import mean
 from cnn.layer.base import BaseLayer
 from icecream import ic
 import numpy as np
+from tqdm import tqdm
+
+# tqdm.pandas()
 
 
 class Sequential:
@@ -22,15 +27,24 @@ class Sequential:
         self.inputs = inputs
         final_result = []
 
-        for i in inputs:
+        for i in tqdm(inputs):
             result = i
             for idx, layer in enumerate(self.layers):
                 ic(idx, result.shape, result)
                 result = layer.run(result)
-                ic(idx, result.shape, result)
             final_result.append(result)
 
         return np.array(final_result)
+
+    def evaluate(actual, predicted):
+        return np.mean(ll(actual, predicted))
+
+    def mean_squared_error(self, actual, predicted):
+        sum_square_error = 0.0
+        for i in range(len(actual)):
+            sum_square_error += (actual[i] - predicted[i]) ** 2.0
+        mean_square_error = 1.0 / len(actual) * sum_square_error
+        print("MSE: {}".format(mean_square_error))
 
     def summary(self, input_shape=None):
         if input_shape is None:
