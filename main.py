@@ -5,12 +5,12 @@ import json
 import numpy as np
 from mlxtend.data import mnist_data
 
-# tqdm.pandas()
 ic.disable()
 
-slicing_factor = 10
+slicing_factor = 2
 
 # Preprocess data
+print("Loading MNIST Dataset...")
 train_x, train_y = mnist_data()
 train_x = train_x[:slicing_factor]
 train_y = train_y[:slicing_factor]
@@ -36,7 +36,7 @@ model.add(
 model.add(Detector(activation="linear"))
 model.add(Pooling(size=(2, 2), stride=1))
 model.add(Flatten())
-model.add(Dense(size=10, input_size=1352, activation="relu"))
+model.add(Dense(size=10, input_size=1352, activation="sigmoid"))
 model.add(Dense(size=10, input_size=10, activation="softmax"))
 
 result = model.run(inputs=train_x)
