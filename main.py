@@ -8,9 +8,12 @@ from mlxtend.data import mnist_data
 # tqdm.pandas()
 ic.disable()
 
+slicing_factor = 10
+
 # Preprocess data
 train_x, train_y = mnist_data()
-train_x = train_x
+train_x = train_x[:slicing_factor]
+train_y = train_y[:slicing_factor]
 train_x = train_x.reshape((len(train_x), 1, 28, 28))
 print(f"Training shape: f{train_x.shape}")
 
@@ -33,11 +36,12 @@ model.add(
 model.add(Detector(activation="linear"))
 model.add(Pooling(size=(2, 2), stride=1))
 model.add(Flatten())
-model.add(Dense(size=1353, activation="relu"))
+model.add(Dense(size=10, activation="relu"))
 # model.add(Dense(size=2, activation="softmax"))
 
 result = model.run(inputs=train_x)
 
+model.mean_squared_error(train_y, result)
 model.summary()
 ic(result)
 ic(result.shape)

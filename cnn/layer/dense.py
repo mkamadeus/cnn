@@ -17,15 +17,15 @@ class Dense(BaseLayer):
 
         self.type = "dense"
         self.size: int = size
-        # self.input_shape = input_shape
         self.weights = weights
-        if self.weights is None:
-            self.weights = np.random.random((1353, 1))
         self.activation = activation
 
     def run(self, inputs: np.array) -> np.ndarray:
-        if(len(inputs.shape) != 1):
+        if len(inputs.shape) != 1:
             raise ValueError("input data should be 1D")
+
+        if self.weights is None:
+            self.weights = np.random.random((inputs.shape[0] + 1, 1))
 
         ic(self.weights.shape)
         ic(inputs.shape)

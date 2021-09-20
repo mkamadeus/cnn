@@ -28,6 +28,8 @@ def relu_derivative(x):
 
 
 def softmax(layer):
+    print(layer)
+    # layer = np.array(layer, dtype=np.float128)
     return lambda x: np.exp(x) / np.sum(np.exp(layer))
 
 
