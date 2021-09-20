@@ -37,7 +37,7 @@ model.add(Detector(activation="linear"))
 model.add(Pooling(size=(2, 2), stride=1))
 model.add(Flatten())
 model.add(Dense(size=10, activation="relu"))
-# model.add(Dense(size=2, activation="softmax"))
+model.add(Dense(size=10, activation="softmax"))
 
 result = model.run(inputs=train_x)
 
