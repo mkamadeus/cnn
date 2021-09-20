@@ -2,7 +2,7 @@ from typing import List
 from cnn.layer.base import BaseLayer
 from icecream import ic
 import numpy as np
-
+from tqdm import tqdm
 # tqdm.pandas()
 
 
@@ -25,7 +25,7 @@ class Sequential:
         final_result = []
 
         # with tqdm(total=len(inputs)) as pbar:
-        for i in inputs:
+        for i in tqdm(inputs):
             result = i
             for idx, layer in enumerate(self.layers):
                 ic(idx, result.shape, result)

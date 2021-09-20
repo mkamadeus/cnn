@@ -10,7 +10,7 @@ ic.disable()
 
 # Preprocess data
 train_x, train_y = mnist_data()
-train_x = train_x[:10]
+train_x = train_x
 train_x = train_x.reshape((len(train_x), 1, 28, 28))
 print(f"Training shape: f{train_x.shape}")
 
