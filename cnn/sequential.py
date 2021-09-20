@@ -1,6 +1,4 @@
 from typing import List
-
-from numpy.core.fromnumeric import mean
 from cnn.layer.base import BaseLayer
 from icecream import ic
 import numpy as np
@@ -35,9 +33,6 @@ class Sequential:
             final_result.append(result)
 
         return np.array(final_result)
-
-    def evaluate(actual, predicted):
-        return np.mean(ll(actual, predicted))
 
     def mean_squared_error(self, actual, predicted):
         sum_square_error = 0.0
