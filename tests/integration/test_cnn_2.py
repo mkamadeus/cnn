@@ -42,8 +42,8 @@ def test_cnn_2():
     model_2.add(Detector(activation="relu"))
     model_2.add(Pooling(size=(3, 3), mode="max", stride=1))
     model_2.add(Flatten())
-    model_2.add(Dense(size=2, weights=weights_1, activation="relu"))
-    model_2.add(Dense(size=2, weights=weights_2, activation="softmax"))
+    model_2.add(Dense(size=2, input_size=2, weights=weights_1, activation="relu"))
+    model_2.add(Dense(size=2, input_size=2, weights=weights_2, activation="softmax"))
     result = model_2.run(inputs=inputs)
 
     assert np.testing.assert_array_almost_equal(result, expected) is None

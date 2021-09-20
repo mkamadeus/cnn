@@ -11,21 +11,22 @@ class Dense(BaseLayer):
     Defines a pooling layer consisting of inputs and kernels.
     """
 
-    def __init__(self, size, weights=None, activation="sigmoid"):
+    def __init__(self, size, input_size, weights=None, activation="sigmoid"):
         if activation not in ACTIVATION_MODES:
             raise Exception("invalid pooling mode")
 
         self.type = "dense"
         self.size: int = size
-        self.weights = weights
+        self.input_size = input_size
+        if weights is None:
+            self.weights = np.random.random((self.input_size + 1, size))
+        else:
+            self.weights = weights
         self.activation = activation
 
     def run(self, inputs: np.array) -> np.ndarray:
         if len(inputs.shape) != 1:
             raise ValueError("input data should be 1D")
-
-        if self.weights is None:
-            self.weights = np.random.random((inputs.shape[0] + 1, 1))
 
         ic(self.weights.shape)
         ic(inputs.shape)
@@ -56,4 +57,4 @@ class Dense(BaseLayer):
         return (1, 1, self.size)
 
     def get_weight_count(self):
-        return len(self.weights)
+        return len(self.weights.flatten())
