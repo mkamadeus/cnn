@@ -24,6 +24,12 @@ class Dense(BaseLayer):
         self.activation = activation
 
     def run(self, inputs: np.array) -> np.ndarray:
+        if(len(inputs.shape) != 1):
+            raise ValueError("input data should be 1D")
+
+        ic(self.weights.shape)
+        ic(inputs.shape)
+
         # add bias to input
         biased_input: np.ndarray = np.insert(inputs, 0, 1)
         ic(inputs)

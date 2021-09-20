@@ -3,16 +3,16 @@ from cnn.layer import Convolutional, Detector, Pooling, Flatten, Dense
 from icecream import ic
 import json
 import numpy as np
-from keras.datasets import mnist
-from tqdm.auto import tqdm
+from mlxtend.data import mnist_data
 
-tqdm.pandas()
+# tqdm.pandas()
 ic.disable()
 
-
-(train_X, train_y), (test_X, test_y) = mnist.load_data()
-train_X = train_X[:1000]
-print("Train: X=%s, y=%s" % (train_X.shape, train_y.shape))
+# Preprocess data
+train_x, train_y = mnist_data()
+train_x = train_x[:10]
+train_x = train_x.reshape((len(train_x), 1, 28, 28))
+print(f"Training shape: f{train_x.shape}")
 
 # load inputs
 with open("data/multiple_inputs/01/inputs.json", "r") as f:
@@ -33,15 +33,10 @@ model.add(
 model.add(Detector(activation="linear"))
 model.add(Pooling(size=(2, 2), stride=1))
 model.add(Flatten())
-model.add(Dense(size=2, activation="relu"))
-model.add(Dense(size=2, activation="softmax"))
+model.add(Dense(size=1353, activation="relu"))
+# model.add(Dense(size=2, activation="softmax"))
 
-
-# TODO: this is a single instance input. How about multiple instances?
-# print(train_X[1])
-inp = np.reshape(train_X, (len(train_X), 1, 28, 28))
-print(inp.shape)
-result = model.run(inputs=inp)
+result = model.run(inputs=train_x)
 
 model.summary()
 ic(result)

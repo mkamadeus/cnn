@@ -2,10 +2,8 @@ from typing import List
 from cnn.layer.base import BaseLayer
 from icecream import ic
 import numpy as np
-from time import sleep
-from tqdm import tqdm
 
-tqdm.pandas()
+# tqdm.pandas()
 
 
 class Sequential:
@@ -26,17 +24,16 @@ class Sequential:
         self.inputs = inputs
         final_result = []
 
-        with tqdm(total=len(inputs)) as pbar:
-            for i in inputs:
-                result = i
-                for idx, layer in enumerate(self.layers):
-                    ic(idx, result.shape, result)
-                    result = layer.run(result)
-                    ic(idx, result.shape, result)
-                final_result.append(result)
-                # sleep(0.1)
-                pbar.update(1)
-            pbar.close()
+        # with tqdm(total=len(inputs)) as pbar:
+        for i in inputs:
+            result = i
+            for idx, layer in enumerate(self.layers):
+                ic(idx, result.shape, result)
+                result = layer.run(result)
+            final_result.append(result)
+            # sleep(0.1)
+        #     pbar.update(1)
+        # pbar.close()
 
         return np.array(final_result)
 
