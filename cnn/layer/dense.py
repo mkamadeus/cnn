@@ -77,11 +77,16 @@ class Dense(BaseLayer):
         delta_activation = np.matmul(np.array([delta]), self.weights[1:].T)
         ic(delta_activation)
 
-        # TODO: do for other activation funvtion
+        # TODO: verify the truthiness of this formula.. not really sure lol
+        # set derivative of activation function
         if self.activation == "relu":
-            delta_layer = np.ma.array(data=delta_activation, mask=~(self.input > 0), fill_value=0).filled()
-            ic(delta_layer)
-            return delta_layer.flatten()
+            derivative_activation_function = relu_derivative
+        elif self.activation == "sigmoid":
+            derivative_activation_function = sigmoid_derivative
+        # delta_layer = np.ma.array(data=delta_activation, mask=~(self.input > 0), fill_value=0).filled()\
+        delta_layer = delta_activation * derivative_activation_function(self.input)
+        ic(delta_layer)
+        return delta_layer.flatten()
 
     def update_weight(self):
         self.weights -= self.learning_rate * self.delta
