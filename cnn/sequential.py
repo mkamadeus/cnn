@@ -4,8 +4,6 @@ from icecream import ic
 import numpy as np
 from tqdm import tqdm
 
-# tqdm.pandas()
-
 
 class Sequential:
     def __init__(self, layers: List[BaseLayer] = None):
@@ -25,10 +23,13 @@ class Sequential:
         """
         Runs a stochastic process (update per one input)
         """
-        for input_data in inputs:
+        if len(inputs) != len(targets):
+            raise ValueError("input count and target count not equal")
+
+        for target, input_data in list(zip(targets, inputs)):
             self.forward_phase(input_data)
-            self.backward_phase(targets)
-            self.update
+            self.backward_phase(target)
+            self.update_paramters()
 
     def batch_run(self, inputs: np.ndarray, targets: np.ndarray):
         """
@@ -103,9 +104,18 @@ class Sequential:
         current_output = input_data
         for layer in self.layers:
             current_output = layer.run(current_output)
-        self.outputs = current_output
 
-    def backward_phase(self):
+        # set output
+        self.output = current_output
+
+    def backward_phase(self, target: np.ndarray):
+        delta_output = self.output - target
+        ic(delta_output)
+
+        for idx, layer in enumerate(reversed(self.layers)):
+            ic(idx)
+            self.layers = layer
+
         pass
 
     def update_parameters(self):

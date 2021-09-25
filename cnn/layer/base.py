@@ -10,6 +10,9 @@ class BaseLayer:
         self.type = "base"
         return
 
+    def compute_delta(self, delta: np.ndarray) -> np.ndarray:
+        return delta
+
     def run(self, inputs: np.ndarray) -> np.ndarray:
         return inputs
 

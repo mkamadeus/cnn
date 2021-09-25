@@ -24,12 +24,13 @@ class Dense(BaseLayer):
             self.weights = weights
         self.activation = activation
         self.learning_rate = learning_rate
-        self.inputs = np.array([])
-        self.outputs = np.array([])
 
     def run(self, inputs: np.array) -> np.ndarray:
         if len(inputs.shape) != 1:
             raise ValueError("input data should be 1D")
+
+        # save input for backprop
+        self.input = inputs
 
         ic(self.weights.shape)
         ic(inputs.shape)
@@ -54,7 +55,8 @@ class Dense(BaseLayer):
         result = activation_func(result)
         ic(result)
 
-        self.outputs = result
+        # save activated output for backprop
+        self.output = result
         return result
 
     def get_shape(self, input_shape=None):
@@ -63,31 +65,23 @@ class Dense(BaseLayer):
     def get_weight_count(self):
         return len(self.weights.flatten())
 
-    def compute_delta(self, target: np.ndarray):
-        # calculate dE/dout
-        derr_dout = self.outputs - target
+    def compute_delta(self, delta: np.ndarray):
+        # store deltas for bias and weight
+        self.delta_bias = delta
+        self.delta_weight = np.matmul(np.array([self.output]).T, np.array([delta]))
 
-        # TODO: softmax :(
-        # calculate dout/dnet
-        if self.activation == "sigmoid":
-            activation_func_derivative = sigmoid_derivative
-        elif self.activation == "relu":
-            activation_func_derivative = relu_derivative
-        dout_dnet = activation_func_derivative(self.outputs)
+        ic(delta, self.output.T)
+        ic(self.delta_bias, self.delta_weight)
 
-        # calculate dnet/dw
-        dnet_dw = self.inputs
-        dnet_dw = np.insert(dnet_dw, 0, 1)
+        # calculate delta for prev layer
+        delta_activation = np.matmul(np.array([delta]), self.weights[1:].T)
+        ic(delta_activation)
 
-        # calculate dE/dw
-        derr_dnet = derr_dout * dout_dnet
-        ic(derr_dnet)
-        self.delta = np.tile(dnet_dw, (2, 1))
-        ic(self.delta)
-        for i, d in enumerate(derr_dnet):
-            self.delta[i] *= d
-
-        return self.delta
+        # TODO: do for other activation funvtion
+        if self.activation == "relu":
+            delta_layer = np.ma.array(data=delta_activation, mask=~(self.input > 0), fill_value=0).filled()
+            ic(delta_layer)
+            return delta_layer.flatten()
 
     def update_weight(self):
         self.weights -= self.learning_rate * self.delta
