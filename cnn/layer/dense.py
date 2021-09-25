@@ -71,7 +71,7 @@ class Dense(BaseLayer):
         self.delta_weight = np.matmul(np.array([self.output]).T, np.array([delta]))
 
         ic(delta, self.output.T)
-        ic(self.delta_bias, self.delta_weight)
+        ic(self.delta_bias, self.delta_weight, self.weights)
 
         # calculate delta for prev layer
         delta_activation = np.matmul(np.array([delta]), self.weights[1:].T)

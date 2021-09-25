@@ -102,19 +102,20 @@ class Sequential:
 
     def forward_phase(self, input_data: np.ndarray):
         current_output = input_data
-        for layer in self.layers:
+        for idx, layer in enumerate(self.layers):
+            ic(idx)
             current_output = layer.run(current_output)
 
         # set output
         self.output = current_output
 
     def backward_phase(self, target: np.ndarray):
-        delta_output = self.output - target
-        ic(delta_output)
+        current_delta = self.output - target
+        ic(current_delta)
 
-        for idx, layer in enumerate(reversed(self.layers)):
+        for idx, layer in enumerate(reversed(self.layers[:-1])):
             ic(idx)
-            self.layers = layer
+            current_delta = layer.compute_delta(current_delta)
 
         pass
 
