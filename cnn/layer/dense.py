@@ -27,10 +27,6 @@ class Dense(BaseLayer):
         self.inputs = np.array([])
         self.outputs = np.array([])
 
-    def run(self, inputs: np.ndarray) -> np.ndarray:
-        # save input
-        self.inputs = inputs
-
     def run(self, inputs: np.array) -> np.ndarray:
         if len(inputs.shape) != 1:
             raise ValueError("input data should be 1D")
