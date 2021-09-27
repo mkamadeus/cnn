@@ -1,5 +1,5 @@
 import numpy as np
-from cnn.activations import relu_derivative, sigmoid, relu, sigmoid_derivative, softmax
+from cnn.activations import linear, relu_derivative, sigmoid, relu, sigmoid_derivative, softmax
 from cnn.layer.base import BaseLayer
 from icecream import ic
 
@@ -52,11 +52,12 @@ class Dense(BaseLayer):
         else:
             raise Exception("invalid activation mode")
 
+        self.output = result
         result = activation_func(result)
         ic(result)
 
         # save activated output for backprop
-        self.output = result
+        self.activated_output = result
         return result
 
     def get_shape(self, input_shape=None):
@@ -66,27 +67,42 @@ class Dense(BaseLayer):
         return len(self.weights.flatten())
 
     def compute_delta(self, delta: np.ndarray):
-        # store deltas for bias and weight
-        self.delta_bias = delta
-        self.delta_weight = np.matmul(np.array([self.output]).T, np.array([delta]))
-
-        ic(delta, self.output.T)
-        ic(self.delta_bias, self.delta_weight, self.weights)
-
-        # calculate delta for prev layer
-        delta_activation = np.matmul(np.array([delta]), self.weights[1:].T)
-        ic(delta_activation)
-
         # TODO: verify the truthiness of this formula.. not really sure lol
         # set derivative of activation function
+
         if self.activation == "relu":
             derivative_activation_function = relu_derivative
+            delta *= derivative_activation_function(self.output)
         elif self.activation == "sigmoid":
             derivative_activation_function = sigmoid_derivative
-        # delta_layer = np.ma.array(data=delta_activation, mask=~(self.input > 0), fill_value=0).filled()\
-        delta_layer = delta_activation * derivative_activation_function(self.input)
-        ic(delta_layer)
-        return delta_layer.flatten()
+            delta *= derivative_activation_function(self.output)
+
+        # ic(derivative_activation_function(delta))
+
+        ic(delta, self.input, self.activated_output, self.weights)
+        # store deltas for bias and weight
+        self.delta_bias = delta
+        self.delta_weight = np.matmul(np.array([self.input]).T, np.array([delta]))
+
+        ic(self.delta_bias, self.delta_weight)
+
+        # ic(delta, self.output.T)
+        # ic(self.delta_bias, self.delta_weight, self.weights)
+
+        # calculate delta for prev layer
+        delta_input = np.matmul(np.array([delta]), self.weights[1:].T)
+        ic(delta_input)
+
+        # # TODO: verify the truthiness of this formula.. not really sure lol
+        # # set derivative of activation function
+        # if self.activation == "relu":
+        #     derivative_activation_function = relu_derivative
+        # elif self.activation == "sigmoid":
+        #     derivative_activation_function = sigmoid_derivative
+        # # delta_layer = np.ma.array(data=delta_activation, mask=~(self.input > 0), fill_value=0).filled()\
+        # delta_layer = delta_activation * derivative_activation_function(self.input)
+        # ic(delta_layer)
+        return delta_input.flatten()
 
     def update_weight(self):
         self.weights -= self.learning_rate * self.delta

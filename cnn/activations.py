@@ -29,5 +29,6 @@ def softmax(layer: np.ndarray):
     return lambda x: np.exp(x) / np.sum(np.exp(layer))
 
 
-def softmax_derivative():
+def softmax_derivative(x: np.ndarray):
+
     pass

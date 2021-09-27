@@ -110,10 +110,11 @@ class Sequential:
         self.output = current_output
 
     def backward_phase(self, target: np.ndarray):
+        # TODO: cek klo misalnya bukan softmax
         current_delta = self.output - target
         ic(current_delta)
 
-        for idx, layer in enumerate(reversed(self.layers[:-1])):
+        for idx, layer in enumerate(reversed(self.layers)):
             ic(idx)
             current_delta = layer.compute_delta(current_delta)
 
