@@ -56,23 +56,17 @@ class Pooling(BaseLayer):
     def compute_delta(self, delta: np.ndarray):
         ic(delta, self.input, self.output)
 
-        # TODO: backprop for average
-        result = []
-        for idx, i in enumerate(self.input):
-            strided_views = generate_strides(i, self.size, stride=self.stride)
-            ic(strided_views, self.output[0, 0][0], delta[idx])
+        result = np.zeros(self.input.shape)
+        for idx, err in enumerate(self.input):
+            for i in range(delta[idx].shape[0]):
+                for j in range(delta[idx].shape[0]):
+                    max_value = self.output[idx, i, j]
+                    err_value = delta[idx, i, j]
+                    ic(max_value, err_value)
+                    input_view = self.input[idx, i : i + self.size[0], j : j + self.size[1]]
+                    input_view = np.where(input_view == max_value, err_value, 0)
+                    ic(input_view)
+                    result[idx, i : i + self.size[0], j : j + self.size[1]] += input_view
 
-            masked = np.array(
-                [
-                    [max_pooling_mask(view, self.output[r, c, 0], delta[idx]) for c, view in enumerate(row)]
-                    for r, row in enumerate(strided_views)
-                ]
-            )
-            ic(masked)
-            # np.ma.array(data=i, mask=~(self.input > ), fill_value=0).filled()
-            result.append(masked)
-
-        result = np.array(result)
         ic(result)
-
-        return delta
+        return result

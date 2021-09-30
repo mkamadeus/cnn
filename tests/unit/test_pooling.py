@@ -14,11 +14,60 @@ import numpy as np
             1,
             "max",
         ),
+        (
+            np.arange(1, 17).reshape((1, 4, 4)),
+            np.array([[[3.5, 4.5, 5.5], [7.5, 8.5, 9.5], [11.5, 12.5, 13.5]]]),
+            (2, 2),
+            1,
+            "average",
+        ),
+        (
+            np.array([[[1, 1, 1, 1], [1, 99, 99, 1], [1, 99, 99, 1], [1, 1, 1, 1]]]),
+            np.array([[[44.555556, 44.555556], [44.555556, 44.555556]]]),
+            (3, 3),
+            1,
+            "average",
+        ),
     ],
 )
 def test_pooling_forward(pool_input, pool_output, size, stride, mode):
     print(pool_input)
     layer = Pooling(size=size, stride=stride, mode=mode)
     result = layer.run(pool_input)
-    assert np.testing.assert_array_equal(result, pool_output) is None
+    assert np.testing.assert_array_almost_equal(result, pool_output) is None
+    pass
+
+
+@pytest.mark.parametrize(
+    "pool_input,pool_output,delta_input,delta_output,size,stride,mode",
+    [
+        (
+            np.arange(1, 17).reshape((1, 4, 4)),
+            np.array([[[6, 7, 8], [10, 11, 12], [14, 15, 16]]]),
+            np.array([[[0.1, 0.2, 0.3], [0.4, 0.5, 0.6], [0.7, 0.8, 0.9]]]),
+            np.array(
+                [
+                    [
+                        [0, 0, 0, 0],
+                        [0, 0.1, 0.2, 0.3],
+                        [0, 0.4, 0.5, 0.6],
+                        [0, 0.7, 0.8, 0.9],
+                    ]
+                ]
+            ),
+            (2, 2),
+            1,
+            "max",
+        ),
+    ],
+)
+def test_pooling_backward(pool_input, pool_output, delta_input, delta_output, size, stride, mode):
+    print(pool_input)
+    layer = Pooling(size=size, stride=stride, mode=mode)
+    layer.input = pool_input
+    layer.output = pool_output
+
+    delta = layer.compute_delta(delta_input)
+
+    assert np.testing.assert_array_almost_equal(delta, delta_output, decimal=4) is None
     pass
