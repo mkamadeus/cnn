@@ -1,5 +1,5 @@
 import numpy as np
-from cnn.activations import linear, relu_derivative, sigmoid, relu, sigmoid_derivative, softmax
+from cnn.activations import linear, relu_derivative, sigmoid, relu, sigmoid_derivative, softmax, linear_derivative
 from cnn.layer.base import BaseLayer
 from icecream import ic
 
@@ -68,21 +68,30 @@ class Dense(BaseLayer):
 
     def compute_delta(self, delta: np.ndarray):
         # TODO: verify the truthiness of this formula.. not really sure lol
+        # assume the delta is result from dE/dout
         # set derivative of activation function
 
         if self.activation == "relu":
             derivative_activation_function = relu_derivative
-            delta *= derivative_activation_function(self.output)
         elif self.activation == "sigmoid":
             derivative_activation_function = sigmoid_derivative
-            delta *= derivative_activation_function(self.output)
+        elif self.activation == "linear":
+            derivative_activation_function = linear_derivative
+        # TODO: handle softmax
 
+        # make delta = dE/dout * dout/dnet using element wise mmult
+        delta *= derivative_activation_function(self.output)
         # ic(derivative_activation_function(delta))
 
         ic(delta, self.input, self.activated_output, self.weights)
+
+        # add bias to input
+        biased_input: np.ndarray = np.insert(self.input, 0, 1)
+        self.delta = np.matmul(np.array([biased_input]).T, np.array([delta]))
+
         # store deltas for bias and weight
-        self.delta_bias = delta
-        self.delta_weight = np.matmul(np.array([self.input]).T, np.array([delta]))
+        self.delta_bias = self.delta[0]
+        self.delta_weight = self.delta[1:]
 
         ic(self.delta_bias, self.delta_weight)
 
@@ -90,6 +99,7 @@ class Dense(BaseLayer):
         # ic(self.delta_bias, self.delta_weight, self.weights)
 
         # calculate delta for prev layer
+        # ini buat apa ya wkwkwk
         delta_input = np.matmul(np.array([delta]), self.weights[1:].T)
         ic(delta_input)
 
@@ -102,7 +112,7 @@ class Dense(BaseLayer):
         # # delta_layer = np.ma.array(data=delta_activation, mask=~(self.input > 0), fill_value=0).filled()\
         # delta_layer = delta_activation * derivative_activation_function(self.input)
         # ic(delta_layer)
-        return delta_input.flatten()
+        return self.delta_weight
 
     def update_weight(self):
         self.weights -= self.learning_rate * self.delta
