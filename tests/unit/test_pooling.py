@@ -1,4 +1,4 @@
-from cnn.layer.pooling import MaxPooling
+from cnn.layer.pooling import MaxPooling, AveragePooling
 import pytest
 import numpy as np
 
@@ -13,6 +13,18 @@ import numpy as np
             (3, 3),
             1,
         ),
+    ],
+)
+def test_max_pooling_forward(pool_input, pool_output, size, stride):
+    layer = MaxPooling(size=size, stride=stride)
+    result = layer.run(pool_input)
+    assert np.testing.assert_array_almost_equal(result, pool_output) is None
+    pass
+
+
+@pytest.mark.parametrize(
+    "pool_input,pool_output,size,stride",
+    [
         (
             np.arange(1, 17).reshape((1, 4, 4)),
             np.array([[[3.5, 4.5, 5.5], [7.5, 8.5, 9.5], [11.5, 12.5, 13.5]]]),
@@ -27,8 +39,8 @@ import numpy as np
         ),
     ],
 )
-def test_pooling_forward(pool_input, pool_output, size, stride):
-    layer = MaxPooling(size=size, stride=stride)
+def test_average_pooling_forward(pool_input, pool_output, size, stride):
+    layer = AveragePooling(size=size, stride=stride)
     result = layer.run(pool_input)
     assert np.testing.assert_array_almost_equal(result, pool_output) is None
     pass
