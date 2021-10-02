@@ -83,8 +83,10 @@ class Dense(BaseLayer):
         # TODO: handle softmax
 
         # make delta = dE/dout * dout/dnet using element wise mmult
+        ic(delta)
+        ic(self.output.reshape(len(self.output), 1))
         if self.activation in ["relu", "sigmoid", "linear"]:
-            delta *= derivative_activation_function(self.output)
+            delta *= derivative_activation_function(self.output.reshape(len(self.output), 1))
         # ic(derivative_activation_function(delta))
 
         ic(delta, self.input, self.activated_output, self.weights)
@@ -93,14 +95,19 @@ class Dense(BaseLayer):
         biased_input: np.ndarray = np.insert(self.input, 0, 1)
         ic(biased_input)
         ic(delta)
-        self.delta = np.matmul(np.array([biased_input]).T, np.array([delta]))
+        ic(biased_input.reshape(len(biased_input), 1))
+        self.delta = np.matmul(biased_input.reshape(len(biased_input), 1), delta.T)
         ic(self.delta)
 
         # store deltas for bias and weight
-        self.delta_bias = self.delta[0]
+        self.delta_bias = self.delta[0:1]
         self.delta_weight = self.delta[1:]
 
         ic(self.delta_bias, self.delta_weight)
+
+        ic(self.weights[1:])
+        ic(delta)
+        delta_out_prev_layer = np.matmul(self.weights[1:], delta)
 
         # ic(delta, self.output.T)
         # ic(self.delta_bias, self.delta_weight, self.weights)
@@ -119,7 +126,7 @@ class Dense(BaseLayer):
         # # delta_layer = np.ma.array(data=delta_activation, mask=~(self.input > 0), fill_value=0).filled()\
         # delta_layer = delta_activation * derivative_activation_function(self.input)
         # ic(delta_layer)
-        return self.delta_weight
+        return delta_out_prev_layer
 
     def update_weight(self):
         self.weights -= self.learning_rate * self.delta

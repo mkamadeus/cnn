@@ -29,7 +29,7 @@ class Sequential:
         for target, input_data in list(zip(targets, inputs)):
             self.forward_phase(input_data)
             self.backward_phase(target)
-            self.update_paramters()
+            self.update_parameters()
 
     def batch_run(self, inputs: np.ndarray, targets: np.ndarray):
         """
@@ -116,7 +116,7 @@ class Sequential:
 
     def backward_phase(self, target: np.ndarray):
         # TODO: cek klo misalnya bukan softmax
-        current_delta = self.output - target
+        current_delta = (self.output - target).reshape((len(target), 1))
         ic(current_delta)
 
         for idx, layer in enumerate(reversed(self.layers)):
