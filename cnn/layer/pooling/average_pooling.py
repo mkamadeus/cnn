@@ -53,7 +53,9 @@ class AveragePooling(BaseLayer):
                 if i % self.stride == 0:
                     for j in range(delta[idx].shape[0]):
                         if j % self.stride == 0:
-                            input_view = np.zeros(self.size).fill(self.delta[idx, i, j] / self.delta[idx].size)
+                            input_view = np.zeros(self.size)
+                            input_view.fill(delta[idx, i, j] / self.input.size)
+                            ic(input_view, delta[idx])
                             result[idx, i : i + self.size[0], j : j + self.size[1]] += input_view
 
         ic(result)
