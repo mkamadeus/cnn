@@ -10,8 +10,11 @@ class Flatten(BaseLayer):
 
     def __init__(self):
         self.type = "flatten      "
+        self.shape_before = None
 
     def run(self, inputs: np.array):
+        self.shape_before = inputs.shape
+        print(type(self.shape_before))
         flatten_output = inputs.flatten()
         return flatten_output
 
@@ -19,6 +22,6 @@ class Flatten(BaseLayer):
         input_shape = super().get_shape(input_shape)
         return (1, 1, input_shape[0] * input_shape[1] * input_shape[2])
 
-    def compute_delta(self, delta: np.ndarray):
-        ic(delta)
-        return delta
+    def compute_delta(self, delta: np.array):
+        print(delta.reshape(self.shape_before))
+        return delta.reshape(self.shape_before)
