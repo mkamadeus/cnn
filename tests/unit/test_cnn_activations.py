@@ -6,6 +6,7 @@ from cnn.activations import (
     relu,
     relu_derivative,
     softmax,
+    softmax_derivative,
 )
 import numpy as np
 
@@ -46,7 +47,7 @@ def test_linear():
 
 
 def test_linear_derivative():
-    data = range(-5, 5)
+    data = np.array(range(-5, 5))
     expected = [1 for _ in range(-5, 5)]
     result = linear_derivative(data)
 
@@ -68,14 +69,14 @@ def test_relu_2():
 
 
 def test_relu_derivative_1():
-    result = relu_derivative(-999)
+    result = relu_derivative(np.array([-999]))
     expected = 0
 
     assert result == expected
 
 
 def test_relu_derivative_2():
-    result = relu_derivative(999)
+    result = relu_derivative(np.array([999]))
     expected = 1
 
     assert result == expected
@@ -87,3 +88,37 @@ def test_softmax():
     softmax_fun = softmax(layer)
 
     assert np.sum(softmax_fun(layer)) == 1.0
+
+
+def test_softmax_derivative():
+    output = np.array(
+        [
+            [9.86e-01],
+            [1.42e-02],
+            [2.05e-04],
+            [2.95e-06],
+            [4.246811e-08],
+            [6.118632e-10],
+            [8.815475e-12],
+            [6.118632e-10],
+            [4.246811e-08],
+            [1.829905e-15],
+        ]
+    )
+    target = 9
+    expected = np.array(
+        [
+            [9.86e-01],
+            [1.42e-02],
+            [2.05e-04],
+            [2.95e-06],
+            [4.246811e-08],
+            [6.118632e-10],
+            [8.815475e-12],
+            [6.118632e-10],
+            [4.246811e-08],
+            [-1.0],
+        ]
+    )
+    result = softmax_derivative(output, target)
+    assert np.testing.assert_array_almost_equal(result, expected) is None

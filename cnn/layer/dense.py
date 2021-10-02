@@ -47,6 +47,8 @@ class Dense(BaseLayer):
             activation_func = sigmoid
         elif self.activation == "relu":
             activation_func = relu
+        elif self.activation == "linear":
+            activation_func = linear
         elif self.activation == "softmax":
             activation_func = softmax(result)
         else:

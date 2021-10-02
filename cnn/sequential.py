@@ -60,7 +60,12 @@ class Sequential:
             predicted[i] = min(max(1e-15, predicted[i]), 1 - 1e-15)
         err = np.seterr(all="ignore")
         score = -(actual * np.log(predicted) + (1 - actual) * np.log(1 - predicted))
-        np.seterr(divide=err["divide"], over=err["over"], under=err["under"], invalid=err["invalid"])
+        np.seterr(
+            divide=err["divide"],
+            over=err["over"],
+            under=err["under"],
+            invalid=err["invalid"],
+        )
         if isinstance(score, np.ndarray):
             score[np.isnan(score)] = 0
         else:

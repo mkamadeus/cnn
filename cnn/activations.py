@@ -6,7 +6,7 @@ def sigmoid(x: np.ndarray):
 
 
 def sigmoid_derivative(x: np.ndarray):
-    return x * (x.fill(1) - x)
+    return x * (np.full((x.shape), 1) - x)
 
 
 def linear(x: np.ndarray):
@@ -14,7 +14,7 @@ def linear(x: np.ndarray):
 
 
 def linear_derivative(x: np.ndarray):
-    return x.fill(1)
+    return np.full((x.shape), 1)
 
 
 def relu(x: np.ndarray):
@@ -29,5 +29,10 @@ def softmax(layer: np.ndarray):
     return lambda x: np.exp(x) / np.sum(np.exp(layer))
 
 
-def softmax_derivative(x: np.ndarray, target: int):
-    return np.where(np.argmax(x) == target, -1.0, x)
+def softmax_derivative(output: np.ndarray, target_class: int):
+    """
+    This is actually the derivative of negative log likelihood loss and softmax activation function.
+    """
+    target_arr = np.zeros(output.shape)
+    target_arr[target_class][0] = 1.0
+    return output - target_arr
