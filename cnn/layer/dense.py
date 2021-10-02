@@ -39,6 +39,7 @@ class Dense(BaseLayer):
         biased_input: np.ndarray = np.insert(inputs, 0, 1)
         ic(inputs)
         biased_input = np.expand_dims(biased_input, axis=1)
+        ic(biased_input)
 
         result = np.matmul(self.weights.T, biased_input).flatten()
         ic(result)
@@ -82,14 +83,18 @@ class Dense(BaseLayer):
         # TODO: handle softmax
 
         # make delta = dE/dout * dout/dnet using element wise mmult
-        delta *= derivative_activation_function(self.output)
+        if self.activation in ["relu", "sigmoid", "linear"]:
+            delta *= derivative_activation_function(self.output)
         # ic(derivative_activation_function(delta))
 
         ic(delta, self.input, self.activated_output, self.weights)
 
         # add bias to input
         biased_input: np.ndarray = np.insert(self.input, 0, 1)
+        ic(biased_input)
+        ic(delta)
         self.delta = np.matmul(np.array([biased_input]).T, np.array([delta]))
+        ic(self.delta)
 
         # store deltas for bias and weight
         self.delta_bias = self.delta[0]
@@ -102,8 +107,8 @@ class Dense(BaseLayer):
 
         # calculate delta for prev layer
         # ini buat apa ya wkwkwk
-        delta_input = np.matmul(np.array([delta]), self.weights[1:].T)
-        ic(delta_input)
+        # delta_input = np.matmul(np.array([delta]), self.weights[1:].T)
+        # ic(delta_input)
 
         # # TODO: verify the truthiness of this formula.. not really sure lol
         # # set derivative of activation function

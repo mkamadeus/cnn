@@ -34,5 +34,5 @@ def softmax_derivative(output: np.ndarray, target_class: int):
     This is actually the derivative of negative log likelihood loss and softmax activation function.
     """
     target_arr = np.zeros(output.shape)
-    target_arr[target_class][0] = 1.0
+    target_arr[target_class] = 1.0
     return output - target_arr
