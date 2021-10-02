@@ -109,23 +109,6 @@ class Dense(BaseLayer):
         ic(delta)
         delta_out_prev_layer = np.matmul(self.weights[1:], delta)
 
-        # ic(delta, self.output.T)
-        # ic(self.delta_bias, self.delta_weight, self.weights)
-
-        # calculate delta for prev layer
-        # ini buat apa ya wkwkwk
-        # delta_input = np.matmul(np.array([delta]), self.weights[1:].T)
-        # ic(delta_input)
-
-        # # TODO: verify the truthiness of this formula.. not really sure lol
-        # # set derivative of activation function
-        # if self.activation == "relu":
-        #     derivative_activation_function = relu_derivative
-        # elif self.activation == "sigmoid":
-        #     derivative_activation_function = sigmoid_derivative
-        # # delta_layer = np.ma.array(data=delta_activation, mask=~(self.input > 0), fill_value=0).filled()\
-        # delta_layer = delta_activation * derivative_activation_function(self.input)
-        # ic(delta_layer)
         return delta_out_prev_layer
 
     def update_weight(self):
