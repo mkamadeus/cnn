@@ -123,7 +123,7 @@ class Sequential:
             ic(idx)
             current_delta = layer.compute_delta(current_delta)
 
-        pass
+        return current_delta
 
     def update_parameters(self):
         pass

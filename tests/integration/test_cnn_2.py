@@ -1,4 +1,4 @@
-from cnn.layer.pooling import Pooling
+from cnn.layer.pooling import MaxPooling
 from cnn.layer import Detector, Convolutional, Flatten, Dense
 from cnn import Sequential
 import json

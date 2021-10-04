@@ -150,9 +150,7 @@ class Convolutional(BaseLayer):
 
             # increment filter index to move to the next filter
             filter_idx += 1
-        # dE_dNet = np.matmul(self.inputs, delta)
-        # ic(dE_dNet)
-        
+            
         return final_feature_maps
 
     def get_shape(self, input_shape=None):

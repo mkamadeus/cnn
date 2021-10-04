@@ -21,7 +21,7 @@ def test_cnn_backprop():
     with open("data/multiple_inputs/02/weight02.json", "r") as f:
         weights_2 = np.array(json.loads(f.read()))
 
-    with open("data/multiple_inputs/02/result.json", "r") as f:
+    with open("data/single_input/04/result.json", "r") as f:
         expected = np.array(json.loads(f.read()))
 
     assert inputs.shape == (1, 1, 5, 5)
@@ -49,8 +49,10 @@ def test_cnn_backprop():
     target = np.array([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0])
 
     model_2.forward_phase(inputs[0])
-    model_2.backward_phase(target)
+    result = model_2.backward_phase(target)
 
-#     assert np.testing.assert_array_almost_equal(result, expected) is None
+    ic(result)
+
+    assert np.testing.assert_array_almost_equal(result, expected) is None
 
     # TODO: backprop here
