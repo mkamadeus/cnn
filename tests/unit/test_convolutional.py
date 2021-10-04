@@ -100,10 +100,11 @@ def test_convolutional_with_filters_defined_4():
     assert result.shape == (1, 3, 3)
     assert np.testing.assert_array_equal(result, expected) is None
 
-    expected = np.array(
-        [
-            [0.07985382],
-            [0.01014405],
-        ]
-    )
-    assert np.testing.assert_allclose(result, expected, rtol=1e-06) is None
+    # expected = np.array(
+    #     [
+    #         [0.07985382],
+    #         [0.01014405]
+    #     ]
+    # )
+    # assert np.testing.assert_allclose(result, expected, rtol=1e-06) is None
+
