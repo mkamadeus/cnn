@@ -8,8 +8,6 @@ class BaseLayer:
 
     def __init__(self):
         self.type = "base"
-        self.X = []
-        self.W = []
         return
 
     def compute_delta(self, delta: np.ndarray) -> np.ndarray:
@@ -26,12 +24,6 @@ class BaseLayer:
 
     def get_W(self):
         return self.W
-
-    # def app_X(self, val):
-    #     self.X.append(val)
-
-    # def app_W(self, val):
-    #     self.W.append(val)
 
     def get_shape(self, input_shape=None):
         if input_shape is None:

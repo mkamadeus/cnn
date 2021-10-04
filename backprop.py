@@ -110,5 +110,30 @@ def script_3():
     model.forward_phase(input_data)
     model.backward_phase(target)
 
+# def script_4():
+#     input_data = np.array([[[0, 76, 64], [109, 0, 10], [118, 71, 67]], [[0, 0, 66], [0, 102, 0], [0, 0, 0]]])
+#     target = np.array([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0])
 
+#     model = Sequential()
+#     model.add(MaxPooling(size=(3, 3), stride=1))
+#     model.add(Flatten())
+#     model.add(Dense(size=2, input_size=2, weights=np.array([[0.0, 0.0], [1.0, 2.0], [3.0, -4.0]]), activation="relu"))
+#     model.add(
+#         Convolutional(
+#             size=10,
+#             input_size=2,
+#             weights=np.array(
+#                 [
+#                     [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+#                     [0.09, 0.08, 0.07, 0.06, 0.05, 0.04, 0.03, 0.04, 0.05, 0.01],
+#                     [0.02, 0.03, 0.02, 0.02, 0.01, 0.02, 0.07, 0.08, 0.05, 0.01],
+#                 ]
+#             ),
+#             activation="softmax",
+#         )
+#     )
+#     model.forward_phase(input_data)
+#     model.backward_phase(target)
+
+# script_2()
 script_3()

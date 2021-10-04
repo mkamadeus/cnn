@@ -15,10 +15,6 @@ class Dense(BaseLayer):
         if activation not in ACTIVATION_MODES:
             raise ValueError("invalid activation mode")
 
-        super().__init__()
-        # self.X = BaseLayer.get_X(self)
-        # self.W = BaseLayer.get_W(self)
-
         self.type = "dense"
         self.size: int = size
         self.input_size = input_size
@@ -26,13 +22,6 @@ class Dense(BaseLayer):
             self.weights = np.random.random((self.input_size + 1, size))
         else:
             self.weights = weights
-
-        self.W.append(weights)
-        # BaseLayer.update(self, self.weights)
-
-        print("Adasdasd")
-        ic(self.W)
-        # ic(self.weights)
 
         self.activation = activation
         self.learning_rate = learning_rate
@@ -52,8 +41,6 @@ class Dense(BaseLayer):
         ic(inputs)
         biased_input = np.expand_dims(biased_input, axis=1)
         ic(biased_input)
-
-        BaseLayer.app_X(self, biased_input)
 
         result = np.matmul(self.weights.T, biased_input).flatten()
         ic(result)
@@ -88,8 +75,6 @@ class Dense(BaseLayer):
         # assume the delta is result from dE/dout
         # set derivative of activation function
 
-        ic(self.X)
-        ic(self.W)
         if self.activation == "relu":
             derivative_activation_function = relu_derivative
         elif self.activation == "sigmoid":
