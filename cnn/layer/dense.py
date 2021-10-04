@@ -3,7 +3,7 @@ from cnn.activations import linear, relu_derivative, sigmoid, relu, sigmoid_deri
 from cnn.layer.base import BaseLayer
 from icecream import ic
 
-ACTIVATION_MODES = ["relu", "sigmoid", "softmax"]
+ACTIVATION_MODES = ["relu", "sigmoid", "softmax", "linear"]
 
 
 class Dense(BaseLayer):
