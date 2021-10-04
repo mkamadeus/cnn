@@ -1,6 +1,7 @@
 from typing import Tuple
 import numpy as np
 from numpy.lib.stride_tricks import as_strided
+import pickle
 
 
 def pad_with(vector, pad_width, _, kwargs):
@@ -63,3 +64,13 @@ def add_all_feature_maps(feature_map_arr: np.array):
         np.add(res, feature_map, out=res)
 
     return res
+
+
+def load_model(filename: str):
+    """
+    Load model and then return a sequential object
+    """
+    opened_file = open(f"{filename}.picl", "rb")
+    model = pickle.load(opened_file)
+    opened_file.close()
+    return model
