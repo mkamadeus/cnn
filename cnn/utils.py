@@ -1,6 +1,7 @@
 from typing import Tuple
 import numpy as np
 from numpy.lib.stride_tricks import as_strided
+import pickle
 
 
 def pad_with(vector, pad_width, _, kwargs):
@@ -39,17 +40,12 @@ def generate_strides(mat: np.array, kernel_size: Tuple[int, int], stride: int = 
     return result
 
 
-def generate_random_uniform_matrixes(
-    n_filter: int, n_channel: int, size: Tuple[int, int]
-):
+def generate_random_uniform_matrixes(n_filter: int, n_channel: int, size: Tuple[int, int]):
     """
     Generates n random uniform matrixes from given kernel size
     """
     return np.array(
-        [
-            [np.random.uniform(low=-1.0, high=1.0, size=size) for _ in range(n_channel)]
-            for _ in range(n_filter)
-        ]
+        [[np.random.uniform(low=-1.0, high=1.0, size=size) for _ in range(n_channel)] for _ in range(n_filter)]
     )
 
 
@@ -63,3 +59,13 @@ def add_all_feature_maps(feature_map_arr: np.array):
         np.add(res, feature_map, out=res)
 
     return res
+
+
+def load_model(filename: str):
+    """
+    Load model and then return a sequential object
+    """
+    opened_file = open(f"{filename}.picl", 'rb')
+    model = pickle.load(opened_file)
+    opened_file.close()
+    return model

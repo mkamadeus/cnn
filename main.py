@@ -1,6 +1,7 @@
 from cnn import Sequential
 from cnn.layer import Convolutional, Detector, Flatten, Dense, Output
 from cnn.layer.pooling import MaxPooling
+from cnn.utils import load_model
 from icecream import ic
 import json
 import numpy as np
@@ -82,8 +83,18 @@ def script_2():
     )
     model.add(Output(size=10, activation="softmax"))
     model.forward_phase(inputs[0])
+    model.save("other-model")
 
     return model.output
 
 
-ic(script_2())
+def script_3():
+    with open("data/multiple_inputs/02/inputs.json", "r") as f:
+        inputs = np.array(json.loads(f.read()))
+
+    model = load_model("other-model")
+    model.forward_phase(inputs[0])
+    return model.output
+
+
+ic(script_3())

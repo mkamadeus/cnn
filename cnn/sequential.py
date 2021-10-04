@@ -3,6 +3,7 @@ from cnn.layer.base import BaseLayer
 from icecream import ic
 import numpy as np
 from tqdm import tqdm
+import pickle
 
 
 class Sequential:
@@ -127,3 +128,8 @@ class Sequential:
 
     def update_parameters(self):
         pass
+
+    def save(self, filename: str = "model"):
+        opened_file = open(f"{filename}.picl", "wb")
+        pickle.dump(self, opened_file)
+        opened_file.close()
