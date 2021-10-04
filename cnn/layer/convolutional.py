@@ -1,4 +1,5 @@
 from cnn.layer.base import BaseLayer
+# from cnn.sequential import Sequential
 from cnn.utils import generate_strides, pad_array, generate_random_uniform_matrixes, add_all_feature_maps
 import numpy as np
 from typing import Tuple
@@ -29,6 +30,10 @@ class Convolutional(BaseLayer):
             raise ValueError("filter count should be >= 1")
         if stride < 1:
             raise ValueError("stride should be >= 1")
+
+        super().__init__()
+        # self.X = BaseLayer.get_X(self)
+        # self.W = BaseLayer.get_W(self)
 
         self.input_shape = input_shape
         self.padding = padding
@@ -81,6 +86,7 @@ class Convolutional(BaseLayer):
             # Add all channel feature maps and then store on final feature
             # maps array
             final_feature_maps.append(add_all_feature_maps(feature_map))
+            ic(final_feature_maps)
 
             # increment filter index to move to the next filter
             filter_idx += 1
@@ -97,6 +103,13 @@ class Convolutional(BaseLayer):
             raise ValueError(f"input shape mismatch, found {inputs.shape} should be {self.input_shape}.")
 
         return self.run_convolution_stage(inputs)
+
+    def compute_delta(self, delta: np.ndarray):
+        # ic(self.filters)
+        # ic(self.X)
+        # ic(self.W)
+
+        return delta
 
     def get_shape(self, input_shape=None):
         if input_shape is None:
