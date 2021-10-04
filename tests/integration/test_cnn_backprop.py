@@ -1,13 +1,14 @@
 from cnn.layer.pooling import MaxPooling
-from cnn.layer import Detector, Convolutional, Flatten, Dense
+from cnn.layer import Detector, Convolutional, Flatten, Dense, detector
 from cnn import Sequential
 import json
 import numpy as np
-
+from icecream import ic
+from cnn.activations import relu_derivative, softmax_derivative
 
 # test taken from https://gdl.cinvestav.mx/amendez/uploads/%20TechnicalPapers/A%20beginner%E2%80%99s%20tutorial%20for%20CNN.pdf
 # with bias weight = 0
-def test_cnn_2():
+def test_cnn_backprop():
     with open("data/multiple_inputs/02/inputs.json", "r") as f:
         inputs = np.array(json.loads(f.read()))
 
@@ -20,7 +21,7 @@ def test_cnn_2():
     with open("data/multiple_inputs/02/weight02.json", "r") as f:
         weights_2 = np.array(json.loads(f.read()))
 
-    with open("data/multiple_inputs/02/result.json", "r") as f:
+    with open("data/single_input/04/result.json", "r") as f:
         expected = np.array(json.loads(f.read()))
 
     assert inputs.shape == (1, 1, 5, 5)
@@ -44,6 +45,14 @@ def test_cnn_2():
     model_2.add(Flatten())
     model_2.add(Dense(size=2, input_size=2, weights=weights_1, activation="relu"))
     model_2.add(Dense(size=2, input_size=2, weights=weights_2, activation="softmax"))
-    result = model_2.run(inputs=inputs)
+
+    target = np.array([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0])
+
+    model_2.forward_phase(inputs[0])
+    result = model_2.backward_phase(target)
+
+    ic(result)
 
     assert np.testing.assert_array_almost_equal(result, expected) is None
+
+    # TODO: backprop here

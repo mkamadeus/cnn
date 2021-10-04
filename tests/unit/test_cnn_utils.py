@@ -164,7 +164,9 @@ def test_generate_random_matrixes_1():
 
 
 def test_add_all_feature_maps():
-    feature_map_arr = np.array([[[0, 1], [3, 4]], [[5, 6], [7, 8]], [[9, 10], [11, 12]]])
+    feature_map_arr = np.array(
+        [[[0, 1], [3, 4]], [[5, 6], [7, 8]], [[9, 10], [11, 12]]]
+    )
 
     expected = np.array(
         [
