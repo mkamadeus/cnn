@@ -89,8 +89,10 @@ class Dense(BaseLayer):
         ic(delta)
         ic(self.output.reshape(len(self.output), 1))
         if self.activation in ["relu", "sigmoid", "linear"]:
-            ic(derivative_activation_function(self.output.reshape(len(self.output), 1)))
-            delta *= derivative_activation_function(self.output.reshape(len(self.output), 1))
+            ic(derivative_activation_function(self.output.reshape(len(self.output), 1)).shape)
+            ic(delta.shape)
+            delta *= derivative_activation_function(self.output)
+            delta = delta.reshape(len(self.output), 1)
 
         ic(delta, self.input, self.activated_output, self.weights)
 
@@ -101,17 +103,9 @@ class Dense(BaseLayer):
         ic(biased_input.reshape(len(biased_input), 1))
 
         # accumulate delta
-        self.delta += np.matmul(biased_input.reshape(len(biased_input), 1), delta.T)
+        self.delta += np.matmul(biased_input.reshape(len(biased_input), 1), delta.reshape(1, len(delta)))
         ic(self.delta)
 
-        # store deltas for bias and weight
-        self.delta_bias = self.delta[0:1]
-        self.delta_weight = self.delta[1:]
-
-        ic(self.delta_bias, self.delta_weight)
-
-        ic(self.weights[1:])
-        ic(delta)
         delta_out_prev_layer = np.matmul(self.weights[1:], delta)
 
         return delta_out_prev_layer

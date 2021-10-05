@@ -5,11 +5,6 @@ from cnn.layer.base import BaseLayer
 from icecream import ic
 
 
-def max_pooling_mask(view: np.ndarray, value: float, delta_value: float):
-    result = np.array([[delta_value if col == value else 0 for col in row] for row in view])
-    return result
-
-
 class MaxPooling(BaseLayer):
     """
     Defines a pooling layer consisting of inputs and kernels.

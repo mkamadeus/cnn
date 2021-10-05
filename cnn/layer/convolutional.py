@@ -155,7 +155,6 @@ class Convolutional(BaseLayer):
         self.filters = self.filters - learning_rate * self.delta
         self.delta = 0
 
-
     def get_shape(self):
         length = (self.input_shape[1] + 2 * self.padding - self.kernel_shape[0]) // self.stride + 1
         width = (self.input_shape[2] + 2 * self.padding - self.kernel_shape[1]) // self.stride + 1
