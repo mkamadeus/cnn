@@ -1,9 +1,12 @@
 from typing import List
+from cnn.errors import mean_sum_squared_error
 from cnn.layer.base import BaseLayer
 from icecream import ic
 import numpy as np
 from tqdm import tqdm
 import pickle
+
+from cnn.layer.output import Output
 
 
 class Sequential:
@@ -35,10 +38,15 @@ class Sequential:
             raise ValueError("input count and target count not equal")
 
         for _ in tqdm(range(self.epoch)):
+            current_result = []
             for target, input_data in list(zip(targets, inputs)):
-                self.forward_phase(input_data)
+                r = self.forward_phase(input_data)
                 self.backward_phase(target)
-                self.update_parameters(self.learning_rate)
+                self.update_weights()
+                current_result.append(r)
+
+            current_result = np.array(current_result)
+            print(f"Error : {mean_sum_squared_error(current_result, targets)}")
 
     def batch_run(self, inputs: np.ndarray, targets: np.ndarray):
         """
@@ -51,7 +59,7 @@ class Sequential:
             for target, input_data in list(zip(targets, inputs)):
                 self.forward_phase(input_data)
                 self.backward_phase(target)
-            self.update_parameters(self.learning_rate)
+            self.update_weights()
 
     def mini_batch_run(self, inputs: np.ndarray, targets: np.ndarray, batch_size=5):
         """
@@ -63,10 +71,10 @@ class Sequential:
         for _ in tqdm(range(self.epoch)):
             for idx, (target, input_data) in enumerate(list(zip(targets, inputs))):
                 if idx % batch_size == 0:
-                    self.update_parameters()
+                    self.update_weights()
                 self.forward_phase(input_data)
                 self.backward_phase(target)
-            self.update_parameters(self.learning_rate)
+            self.update_weights()
 
     def predict(self, inputs: np.ndarray) -> np.ndarray:
         """
@@ -79,7 +87,10 @@ class Sequential:
             self.forward_phase(input_data)
 
             # get result
-            prediction = self.layers[-1].run()
+            if type(self.layers[-1]) != Output:
+                raise TypeError("last layer should be output layer")
+
+            prediction = self.layers[-1].predict()
             result.append(prediction)
 
         return np.array(result)
@@ -130,6 +141,7 @@ class Sequential:
         for idx, layer in enumerate(self.layers):
             ic(idx)
             current_output = layer.run(current_output)
+        return current_output
 
     def backward_phase(self, target: np.ndarray):
         """
@@ -142,13 +154,13 @@ class Sequential:
 
         return current_delta
 
-    def update_parameters(self):
+    def update_weights(self):
         """
         🥒 Update trainable parameters.
         """
         for idx, layer in enumerate(self.layers):
             ic(idx)
-            layer.update_weight(self.learning_rate)
+            layer.update_weights(self.learning_rate)
 
     def save(self, filename: str = "model"):
         """

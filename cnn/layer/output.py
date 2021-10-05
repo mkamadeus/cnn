@@ -21,13 +21,15 @@ class Output(BaseLayer):
     def run(self, inputs: np.ndarray):
         # store result
         self.result = inputs
+        return self.result
 
+    def predict(self):
         # get prediction
-        output = np.zeros(self.size)
-        ic(np.argmax(inputs))
-        output[np.argmax(inputs)] = 1.0
+        # output = np.zeros(self.size)
+        # ic(np.argmax(self.result))
+        # output[np.argmax(self.result)] = 1.0
 
-        return output
+        return self.result
 
     def compute_delta(self, delta: np.ndarray) -> np.ndarray:
         if self.error_mode == "logloss":

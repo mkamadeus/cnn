@@ -110,9 +110,10 @@ class Dense(BaseLayer):
 
         return delta_out_prev_layer
 
-    def update_weight(self, learning_rate):
+    def update_weights(self, learning_rate):
+        print("denseweight")
         # update weight
-        self.weights -= learning_rate * self.delta
+        self.weights = self.weights - learning_rate * self.delta
 
         # reset delta
         self.delta = 0

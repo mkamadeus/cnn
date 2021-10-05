@@ -151,7 +151,7 @@ class Convolutional(BaseLayer):
 
         return final_delta_filters
 
-    def update_weight(self, learning_rate: float):
+    def update_weights(self, learning_rate: float):
         self.filters = self.filters - learning_rate * self.delta
         self.delta = 0
 
