@@ -28,3 +28,9 @@ class Detector(BaseLayer):
 
         act_func = np.vectorize(act_f, otypes=[float])
         return act_func(inputs)
+
+    def compute_delta(self, delta: np.ndarray):
+        return delta
+
+    def update_weight(self):
+        pass

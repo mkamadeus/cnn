@@ -17,7 +17,7 @@ def script_1():
     train_x = train_x[:slicing_factor]
     train_y = train_y[:slicing_factor]
     train_x = train_x.reshape((len(train_x), 1, 28, 28))
-    print(f"Training shape: f{train_x.shape}")
+    print(f"Training shape: {train_x.shape}")
 
     # load inputs
     with open("data/multiple_inputs/01/inputs.json", "r") as f:

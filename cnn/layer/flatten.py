@@ -1,6 +1,5 @@
 import numpy as np
 from cnn.layer.base import BaseLayer
-from icecream import ic
 
 
 class Flatten(BaseLayer):
@@ -25,3 +24,6 @@ class Flatten(BaseLayer):
     def compute_delta(self, delta: np.array):
         print(delta.reshape(self.shape_before))
         return delta.reshape(self.shape_before)
+
+    def update_weights(self):
+        pass
