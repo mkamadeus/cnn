@@ -1,47 +1,106 @@
 from typing import List
+from cnn.errors import mean_sum_squared_error
 from cnn.layer.base import BaseLayer
 from icecream import ic
 import numpy as np
 from tqdm import tqdm
 import pickle
 
+from cnn.layer.output import Output
+
 
 class Sequential:
-    def __init__(self, layers: List[BaseLayer] = None):
+    """
+    🥒 Sequential model class definition.
+    """
+
+    def __init__(
+        self,
+        layers: List[BaseLayer] = None,
+        learning_rate: float = 0.5,
+        epoch: int = 10,
+    ):
         self.type = "Sequential"
         if layers is None:
             self.layers = []
         else:
             self.layers = layers
 
+        self.learning_rate = learning_rate
+        self.epoch = epoch
+
     def add(self, layer: BaseLayer):
         """
-        Adds a new layer to the sequential model.
+        🥒 Adds a new layer to the sequential model.
         """
         self.layers.append(layer)
 
     def stochastic_run(self, inputs: np.ndarray, targets: np.ndarray):
         """
-        Runs a stochastic process (update per one input)
+        🥒 Runs a stochastic process (update per one input)
         """
         if len(inputs) != len(targets):
             raise ValueError("input count and target count not equal")
 
-        for target, input_data in list(zip(targets, inputs)):
-            self.forward_phase(input_data)
-            self.backward_phase(target)
-            self.update_parameters()
+        for _ in tqdm(range(self.epoch)):
+            current_result = []
+            for target, input_data in list(zip(targets, inputs)):
+                r = self.forward_phase(input_data)
+                self.backward_phase(target)
+                self.update_weights()
+                current_result.append(r)
+
+            current_result = np.array(current_result)
+            print(f"Error : {mean_sum_squared_error(current_result, targets)}")
 
     def batch_run(self, inputs: np.ndarray, targets: np.ndarray):
         """
-        Runs a batch process (update per one batch/all input)
+        🥒 Runs a batch process (update per one batch/all input)
         """
-        pass
+        if len(inputs) != len(targets):
+            raise ValueError("input count and target count not equal")
 
-    def mini_batch_run(self, inputs: np.ndarray, targets: np.ndarray):
-        pass
-        self.inputs = inputs
+        for _ in tqdm(range(self.epoch)):
+            for target, input_data in list(zip(targets, inputs)):
+                self.forward_phase(input_data)
+                self.backward_phase(target)
+            self.update_weights()
 
+    def mini_batch_run(self, inputs: np.ndarray, targets: np.ndarray, batch_size=5):
+        """
+        🥒 Runs a mini-batch process (update per batch size)
+        """
+        if len(inputs) != len(targets):
+            raise ValueError("input count and target count not equal")
+
+        for _ in tqdm(range(self.epoch)):
+            for idx, (target, input_data) in enumerate(list(zip(targets, inputs))):
+                if idx % batch_size == 0:
+                    self.update_weights()
+                self.forward_phase(input_data)
+                self.backward_phase(target)
+            self.update_weights()
+
+    def predict(self, inputs: np.ndarray) -> np.ndarray:
+        """
+        🥒 Does a prediction using current weights with supplied input and target.
+        """
+        result = []
+
+        for input_data in inputs:
+            # forward propagation
+            self.forward_phase(input_data)
+
+            # get result
+            if type(self.layers[-1]) != Output:
+                raise TypeError("last layer should be output layer")
+
+            prediction = self.layers[-1].predict()
+            result.append(prediction)
+
+        return np.array(result)
+
+    # TODO: soon to be deprecated
     def run(self, inputs):
         final_result = []
 
@@ -54,37 +113,10 @@ class Sequential:
 
         return np.array(final_result)
 
-    def ll(self, actual, predicted):
-        actual = np.array(actual)
-        predicted = np.array(predicted)
-        for i in range(0, predicted.shape[0]):
-            predicted[i] = min(max(1e-15, predicted[i]), 1 - 1e-15)
-        err = np.seterr(all="ignore")
-        score = -(actual * np.log(predicted) + (1 - actual) * np.log(1 - predicted))
-        np.seterr(
-            divide=err["divide"],
-            over=err["over"],
-            under=err["under"],
-            invalid=err["invalid"],
-        )
-        if isinstance(score, np.ndarray):
-            score[np.isnan(score)] = 0
-        else:
-            if np.isnan(score):
-                score = 0
-        return score
-
-    def log_loss(self, actual, predicted):
-        return np.mean(self.ll(actual, predicted))
-
-    def mean_squared_error(self, actual, predicted):
-        sum_square_error = 0.0
-        for i in range(len(actual)):
-            sum_square_error += (actual[i] - predicted[i]) ** 2.0
-        mean_square_error = 1.0 / len(actual) * sum_square_error
-        print("MSE: {}".format(mean_square_error))
-
     def summary(self, input_shape=None):
+        """
+        🥒 Output summary.
+        """
         if input_shape is None:
             n_channel = len(self.inputs[0])
             length = len(self.inputs[0][0])
@@ -107,29 +139,38 @@ class Sequential:
         print(f"Total param/weight: {total_weight}")
 
     def forward_phase(self, input_data: np.ndarray):
+        """
+        🥒 Forward propagation.
+        """
         current_output = input_data
         for idx, layer in enumerate(self.layers):
             ic(idx)
             current_output = layer.run(current_output)
-
-        # set output
-        self.output = current_output
+        return current_output
 
     def backward_phase(self, target: np.ndarray):
-        # TODO: cek klo misalnya bukan softmax
-        current_delta = (self.output - target).reshape((len(target), 1))
-        ic(current_delta)
-
+        """
+        🥒 Backward propagation.
+        """
+        current_delta = target
         for idx, layer in enumerate(reversed(self.layers)):
             ic(idx)
             current_delta = layer.compute_delta(current_delta)
 
         return current_delta
 
-    def update_parameters(self):
-        pass
+    def update_weights(self):
+        """
+        🥒 Update trainable parameters.
+        """
+        for idx, layer in enumerate(self.layers):
+            ic(idx)
+            layer.update_weights(self.learning_rate)
 
     def save(self, filename: str = "model"):
+        """
+        🥒 Pickle this model.
+        """
         opened_file = open(f"{filename}.picl", "wb")
         pickle.dump(self, opened_file)
         opened_file.close()

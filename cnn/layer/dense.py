@@ -11,7 +11,7 @@ class Dense(BaseLayer):
     Defines a pooling layer consisting of inputs and kernels.
     """
 
-    def __init__(self, size, input_size, weights=None, activation="sigmoid", learning_rate=0.5):
+    def __init__(self, size, input_size, weights=None, activation="sigmoid"):
         if activation not in ACTIVATION_MODES:
             raise ValueError("invalid activation mode")
 
@@ -24,7 +24,9 @@ class Dense(BaseLayer):
             self.weights = weights
 
         self.activation = activation
-        self.learning_rate = learning_rate
+
+        # set delta to 0
+        self.delta = 0
 
     def run(self, inputs: np.array) -> np.ndarray:
         if len(inputs.shape) != 1:
@@ -87,8 +89,10 @@ class Dense(BaseLayer):
         ic(delta)
         ic(self.output.reshape(len(self.output), 1))
         if self.activation in ["relu", "sigmoid", "linear"]:
-            ic(derivative_activation_function(self.output.reshape(len(self.output), 1)))
-            delta *= derivative_activation_function(self.output.reshape(len(self.output), 1))
+            ic(derivative_activation_function(self.output.reshape(len(self.output), 1)).shape)
+            ic(delta.shape)
+            delta *= derivative_activation_function(self.output)
+            delta = delta.reshape(len(self.output), 1)
 
         ic(delta, self.input, self.activated_output, self.weights)
 
@@ -97,21 +101,19 @@ class Dense(BaseLayer):
         ic(biased_input)
         ic(delta)
         ic(biased_input.reshape(len(biased_input), 1))
-        self.delta = np.matmul(biased_input.reshape(len(biased_input), 1), delta.T)
+
+        # accumulate delta
+        self.delta += np.matmul(biased_input.reshape(len(biased_input), 1), delta.reshape(1, len(delta)))
         ic(self.delta)
 
-        # store deltas for bias and weight
-        self.delta_bias = self.delta[0:1]
-        self.delta_weight = self.delta[1:]
-
-        ic(self.delta_bias, self.delta_weight)
-
-        ic(self.weights[1:])
-        ic(delta)
         delta_out_prev_layer = np.matmul(self.weights[1:], delta)
 
         return delta_out_prev_layer
 
-    def update_weight(self):
-        self.weights -= self.learning_rate * self.delta
-        return self.weights
+    def update_weights(self, learning_rate):
+        print("denseweight")
+        # update weight
+        self.weights = self.weights - learning_rate * self.delta
+
+        # reset delta
+        self.delta = 0

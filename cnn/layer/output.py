@@ -1,8 +1,10 @@
 import numpy as np
 from cnn.layer import BaseLayer
-from icecream import ic
+
+# from icecream import ic
 
 ACTIVATION_MODES = ["relu", "sigmoid", "linear", "softmax"]
+ERROR_MODES = ["sse", "logloss"]
 
 
 class Output(BaseLayer):
@@ -10,20 +12,28 @@ class Output(BaseLayer):
     Defines an output layer.
     """
 
-    def __init__(self, size: int, activation: str, sigmoid_threshold: float = 0.5):
+    def __init__(self, size: int, error_mode: str = "logloss"):
+        if error_mode not in ERROR_MODES:
+            raise ValueError("invalid error mode")
+
         self.size = size
-        self.activation = activation
-        self.sigmoid_threshold = sigmoid_threshold
+        self.error_mode = error_mode
 
     def run(self, inputs: np.ndarray):
-        if self.activation == "softmax":
-            output = np.zeros(self.size)
-            ic(np.argmax(inputs))
-            output[np.argmax(inputs)] = 1.0
-            return output
+        # store result
+        self.result = inputs
+        return self.result
 
-        if self.activation == "sigmoid":
-            func = np.vectorize(lambda x: 1.0 if x >= self.sigmoid_threshold else 0.0)
-            return func(inputs)
+    def predict(self):
+        # get prediction
+        # output = np.zeros(self.size)
+        # ic(np.argmax(self.result))
+        # output[np.argmax(self.result)] = 1.0
 
-        return inputs
+        return self.result
+
+    def compute_delta(self, delta: np.ndarray) -> np.ndarray:
+        if self.error_mode == "logloss":
+            return self.result - delta
+        elif self.error_mode == "sse":
+            return self.result - delta

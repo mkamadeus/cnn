@@ -13,6 +13,9 @@ class BaseLayer:
     def compute_delta(self, delta: np.ndarray) -> np.ndarray:
         return delta
 
+    def update_weights(self, learning_rate: float):
+        pass
+
     def run(self, inputs: np.ndarray) -> np.ndarray:
         return inputs
 

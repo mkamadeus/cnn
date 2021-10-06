@@ -1,8 +1,5 @@
-from operator import mul
 from cnn.layer.base import BaseLayer
-# from cnn.sequential import Sequential
 from cnn.utils import generate_strides, pad_array, generate_random_uniform_matrixes, add_all_feature_maps
-from cnn.activations import linear, relu_derivative, sigmoid, relu, sigmoid_derivative, softmax, linear_derivative
 import numpy as np
 from typing import Tuple
 from icecream import ic
@@ -33,9 +30,6 @@ class Convolutional(BaseLayer):
         if stride < 1:
             raise ValueError("stride should be >= 1")
 
-        # self.X = BaseLayer.get_X(self)
-        # self.W = BaseLayer.get_W(self)
-
         self.input_shape = input_shape
         self.padding = padding
         self.stride = stride
@@ -60,6 +54,8 @@ class Convolutional(BaseLayer):
         self.bias = 1
         self.bias_weight = 0
         self.type = "convolutional"
+
+        self.delta = 0
 
         ic(self.input_shape)
 
@@ -99,7 +95,6 @@ class Convolutional(BaseLayer):
         bias_weight = self.bias * self.bias_weight
         return np.array(final_feature_maps) + bias_weight
 
-    # TODO: adjust with pooling
     def run(self, inputs: np.array):
         # Handling error of input
         # If number of channels of input is inequal
@@ -113,51 +108,57 @@ class Convolutional(BaseLayer):
         return self.outputs
 
     def compute_delta(self, delta: np.ndarray):
-        ic(self.inputs)
-        # print("asdasd")
-        final_feature_maps = []
+        final_delta_filters = []
         filter_idx = 0
 
         ic(delta)
-        
+
         for d in delta:
-            feature_map = []
+            delta_filters = []
             for channel_idx, input_channel in enumerate(self.inputs):
                 # setup input with padding
                 padded = pad_array(input_channel, self.padding, 0)
 
                 # aka receptive fields
                 strided_views = generate_strides(padded, self.kernel_shape, stride=self.stride)
-                
+
                 multiplied_views = np.array([np.multiply(view, d) for view in strided_views])
 
                 # apply convolutional multiplication
                 self.delta_filter = np.array([[np.sum(view) for view in row] for row in multiplied_views])
-                
+
                 ic(self.delta_filter)
 
                 # save convolution multiplication to channel feature map
-                feature_map.append(self.delta_filter)
+                delta_filters.append(self.delta_filter)
 
             # convert to np.array
-            feature_map = np.array(feature_map)
-            ic(feature_map)
+            delta_filters = np.array(delta_filters)
+            ic(delta_filters)
 
             # Add all channel feature maps and then store on final feature
             # maps array
-            final_feature_maps.append(add_all_feature_maps(feature_map))
-            ic(final_feature_maps)
+            final_delta_filters.append(add_all_feature_maps(delta_filters))
+            ic(final_delta_filters)
 
             # increment filter index to move to the next filter
             filter_idx += 1
-            
-        return final_feature_maps
 
-    def get_shape(self, input_shape=None):
-        if input_shape is None:
-            input_shape = self.input_shape
-        length = (input_shape[1] + 2 * self.padding - self.kernel_shape[0]) // self.stride + 1
-        width = (input_shape[2] + 2 * self.padding - self.kernel_shape[1]) // self.stride + 1
+        final_delta_filters = np.array(final_delta_filters)
+        self.delta += final_delta_filters
+
+        # TODO: backprop fix
+
+        return final_delta_filters
+
+    def update_weights(self, learning_rate: float):
+        self.filters = self.filters - learning_rate * self.delta
+        self.delta = 0
+
+    def get_shape(self):
+        length = (self.input_shape[1] + 2 * self.padding - self.kernel_shape[0]) // self.stride + 1
+        width = (self.input_shape[2] + 2 * self.padding - self.kernel_shape[1]) // self.stride + 1
+
         return (self.filter_count, length, width)
 
     def get_weight_count(self):
