@@ -1,6 +1,7 @@
 import numpy as np
 from cnn.layer import BaseLayer
-from icecream import ic
+
+# from icecream import ic
 
 ACTIVATION_MODES = ["relu", "sigmoid", "linear", "softmax"]
 ERROR_MODES = ["sse", "logloss"]

@@ -14,7 +14,12 @@ class Sequential:
     🥒 Sequential model class definition.
     """
 
-    def __init__(self, layers: List[BaseLayer] = None, learning_rate: float = 0.5, epoch: int = 10):
+    def __init__(
+        self,
+        layers: List[BaseLayer] = None,
+        learning_rate: float = 0.5,
+        epoch: int = 10,
+    ):
         self.type = "Sequential"
         if layers is None:
             self.layers = []

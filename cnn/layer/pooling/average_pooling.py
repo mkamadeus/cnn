@@ -61,5 +61,5 @@ class AveragePooling(BaseLayer):
         ic(result)
         return result
 
-    def update_weights(self):
+    def update_weights(self, learning_rate: float):
         pass
