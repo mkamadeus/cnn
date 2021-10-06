@@ -64,6 +64,8 @@ def script_1():
     m.stochastic_run(inputs, targets)
     result = m.predict(inputs)
 
+    ic(result)
+
     # print(result)
     # m.forward_phase(input_data=inputs[0])
     # m.backward_phase(target=target)
