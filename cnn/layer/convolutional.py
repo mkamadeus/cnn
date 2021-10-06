@@ -75,6 +75,7 @@ class Convolutional(BaseLayer):
                 multiplied_views = np.array([np.multiply(view, kernels[channel_idx]) for view in strided_views])
                 # ic(multiplied_views)
                 # apply convolutional multiplication
+                ic(kernels.shape)
                 conv_mult_res = np.array([[np.sum(view) for view in row] for row in multiplied_views])
 
                 # save convolution multiplication to channel feature map
@@ -147,9 +148,61 @@ class Convolutional(BaseLayer):
         final_delta_filters = np.array(final_delta_filters)
         self.delta += final_delta_filters
 
+        ic(final_delta_filters)
+        # ic(self.filters)
+        # ic(self.filters.shape)
+        # ic(np.rot90(self.filters,k=2, axes=(0,1)))
+        ic(np.rot90(self.filters, k=2, axes=(-2, -1)))
+        rotated_filters = np.rot90(self.filters, k=2, axes=(-2, -1))
+        print(self.filters.shape)
+        print(rotated_filters[1])
+        # print(final_delta_filters)
+
+        conv_delta = []
+        filter_idx = 0
+        # ic(rotated_filters)
+
+        for r in [rotated_filters]:
+            feature_map = []
+
+            for channel_idx, input_delta in enumerate(delta):
+                # setup input with padding
+                padded = pad_array(input_delta, self.filters.shape[-1] - 1, 0)
+                # ic(self.filters.shape[-1] - 1)
+                # aka receptive fields
+                strided_views = generate_strides(padded, self.kernel_shape, stride=self.stride)
+                # ic(padded)
+                # ic(strided_views)
+                # kernels = kernels[0]
+                # ic(channel_idx)
+                # ic(r.shape)
+                multiplied_views = np.array([np.multiply(view, r[channel_idx]) for view in strided_views])
+                # ic(multiplied_views)
+                # apply convolutional multiplication
+                conv_mult_res = np.array([[np.sum(view) for view in row] for row in multiplied_views])
+
+                # save convolution multiplication to channel feature map
+                feature_map.append(conv_mult_res)
+
+            # convert to np.array
+            print("aaa")
+            feature_map = np.array(feature_map)
+            ic(feature_map)
+
+            # Add all channel feature maps and then store on final feature
+            # maps array
+            conv_delta.append(add_all_feature_maps(feature_map))
+            # ic(conv_delta)
+
+            # increment filter index to move to the next filter
+            filter_idx += 1
+        conv_delta = np.array(conv_delta)
+        ic(conv_delta)
+
+        # final_conv_delta = np.add(conv_delta[0], conv_delta[1])
         # TODO: backprop fix
 
-        return final_delta_filters
+        return conv_delta
 
     def update_weights(self, learning_rate: float):
         self.filters = self.filters - learning_rate * self.delta

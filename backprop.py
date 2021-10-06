@@ -12,7 +12,7 @@ from icecream import ic
 
 
 def script_1():
-    ic.disable()
+    # ic.disable()
 
     with open("data/multiple_inputs/02/inputs.json", "r") as f:
         inputs = np.array(json.loads(f.read()))
@@ -43,7 +43,7 @@ def script_1():
         ]
     )
 
-    m = Sequential(epoch=1000)
+    m = Sequential(epoch=1)
     m.add(
         Convolutional(
             input_shape=(1, 5, 5),
@@ -64,7 +64,7 @@ def script_1():
     m.stochastic_run(inputs, targets)
     result = m.predict(inputs)
 
-    print(result)
+    # print(result)
     # m.forward_phase(input_data=inputs[0])
     # m.backward_phase(target=target)
 
