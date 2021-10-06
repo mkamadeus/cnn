@@ -96,7 +96,8 @@ class Sequential:
                 raise TypeError("last layer should be output layer")
 
             prediction = self.layers[-1].predict(
-                activation=self.layers[-2].activation, sigmoid_threshold=sigmoid_threshold
+                activation=self.layers[-2].activation,
+                sigmoid_threshold=sigmoid_threshold,
             )
             result.append(prediction)
 
