@@ -24,11 +24,14 @@ class Output(BaseLayer):
         self.result = inputs
         return self.result
 
-    def predict(self):
+    def predict(self, activation: str, sigmoid_threshold: float = 0.5):
         # get prediction
-        # output = np.zeros(self.size)
-        # ic(np.argmax(self.result))
-        # output[np.argmax(self.result)] = 1.0
+        if activation not in ACTIVATION_MODES:
+            raise ValueError("invalid activation mode")
+        if activation == "softmax":
+            return np.array([np.argmax(self.result)])
+        if activation == "sigmoid":
+            return np.argwhere(self.result >= sigmoid_threshold).flatten()
 
         return self.result
 

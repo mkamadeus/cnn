@@ -89,7 +89,7 @@ class Dense(BaseLayer):
         ic(delta)
         ic(self.output.reshape(len(self.output), 1))
         if self.activation in ["relu", "sigmoid", "linear"]:
-            ic(derivative_activation_function(self.output.reshape(len(self.output), 1)).shape)
+            ic(derivative_activation_function(self.output))
             ic(delta.shape)
             delta *= derivative_activation_function(self.output)
             delta = delta.reshape(len(self.output), 1)
@@ -108,7 +108,7 @@ class Dense(BaseLayer):
 
         delta_out_prev_layer = np.matmul(self.weights[1:], delta)
 
-        return delta_out_prev_layer
+        return delta_out_prev_layer.flatten()
 
     def update_weights(self, learning_rate):
         print("denseweight")

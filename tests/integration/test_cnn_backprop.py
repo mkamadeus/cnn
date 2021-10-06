@@ -1,13 +1,14 @@
 from cnn.layer.pooling import MaxPooling
-from cnn.layer import Detector, Convolutional, Flatten, Dense, detector
+from cnn.layer import Detector, Convolutional, Flatten, Dense, Output
 from cnn import Sequential
 import json
 import numpy as np
 from icecream import ic
-from cnn.activations import relu_derivative, softmax_derivative
 
 # test taken from https://gdl.cinvestav.mx/amendez/uploads/%20TechnicalPapers/A%20beginner%E2%80%99s%20tutorial%20for%20CNN.pdf
 # with bias weight = 0
+
+
 def test_cnn_backprop():
     with open("data/multiple_inputs/02/inputs.json", "r") as f:
         inputs = np.array(json.loads(f.read()))
@@ -44,7 +45,8 @@ def test_cnn_backprop():
     model_2.add(MaxPooling(size=(3, 3), stride=1))
     model_2.add(Flatten())
     model_2.add(Dense(size=2, input_size=2, weights=weights_1, activation="relu"))
-    model_2.add(Dense(size=2, input_size=2, weights=weights_2, activation="softmax"))
+    model_2.add(Dense(size=10, input_size=2, weights=weights_2, activation="softmax"))
+    model_2.add(Output(size=10))
 
     target = np.array([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0])
 

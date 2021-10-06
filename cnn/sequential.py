@@ -81,7 +81,7 @@ class Sequential:
                 self.backward_phase(target)
             self.update_weights()
 
-    def predict(self, inputs: np.ndarray) -> np.ndarray:
+    def predict(self, inputs: np.ndarray, sigmoid_threshold: float = 0.5) -> np.ndarray:
         """
         🥒 Does a prediction using current weights with supplied input and target.
         """
@@ -95,7 +95,10 @@ class Sequential:
             if type(self.layers[-1]) != Output:
                 raise TypeError("last layer should be output layer")
 
-            prediction = self.layers[-1].predict()
+            prediction = self.layers[-1].predict(
+                activation=self.layers[-2].activation,
+                sigmoid_threshold=sigmoid_threshold,
+            )
             result.append(prediction)
 
         return np.array(result)
