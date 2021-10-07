@@ -35,7 +35,7 @@ class Convolutional(BaseLayer):
         self.stride = stride
         self.filter_count = filter_count
         self.kernel_shape = kernel_shape
-        self.n_channels = input_shape[1]
+        self.n_channels = input_shape[0]
         self.inputs = None
         self.outputs = None
 
@@ -113,16 +113,19 @@ class Convolutional(BaseLayer):
         filter_idx = 0
 
         ic(delta)
-        print(f"delta: {delta}")
+        # print(f"delta shape: {delta.shape}")
 
         for d in delta:
             delta_filters = []
             for channel_idx, input_channel in enumerate(self.inputs):
+                # print(f"input_channel shape: {input_channel.shape}")
                 # setup input with padding
                 padded = pad_array(input_channel, self.padding, 0)
+                # print(f"padded shape: {padded.shape}")
 
                 # aka receptive fields
-                strided_views = generate_strides(padded, self.kernel_shape, stride=self.stride)
+                strided_views = generate_strides(padded, d.shape, stride=self.stride)
+                # print(f"strided views shape: {strided_views.shape}")
 
                 multiplied_views = np.array([np.multiply(view, d) for view in strided_views])
 
@@ -202,6 +205,8 @@ class Convolutional(BaseLayer):
         return "conv2d"
 
     def update_weights(self, learning_rate: float):
+        # print(f"filters shape: {self.filters.shape}")
+        # print(f"delta shape: {self.delta.shape}")
         self.filters = self.filters - learning_rate * self.delta
         self.delta = 0
 
