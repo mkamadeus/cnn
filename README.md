@@ -7,6 +7,7 @@
 Implementation of Convolutional Neural Networks (CNN) for IF4074 Advanced Machine Learning. Implemented in Python 3.8.
 
 ## Notable Libraries
+
 - numpy (for array and matrix operations)
 - icecream (for debugging)
 - black (code formatting)
@@ -21,7 +22,7 @@ source env/bin/activate # in Windows systems, run `.\env\Scripts\activate`
 ## Testing
 
 ```bash
-make test 
+make test
 ```
 
 ## Technical Details

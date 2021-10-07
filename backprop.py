@@ -14,16 +14,16 @@ from icecream import ic
 def script_1():
     # ic.disable()
 
-    with open("data/multiple_inputs/02/inputs.json", "r") as f:
+    with open("data/multiple_inputs/03/inputs.json", "r") as f:
         inputs = np.array(json.loads(f.read()))
 
-    with open("data/multiple_inputs/02/filters.json", "r") as f:
+    with open("data/multiple_inputs/03/filters.json", "r") as f:
         filters = np.array(json.loads(f.read()))
 
-    with open("data/multiple_inputs/02/weight01.json", "r") as f:
+    with open("data/multiple_inputs/03/weight01.json", "r") as f:
         weights_1 = np.array(json.loads(f.read()))
 
-    with open("data/multiple_inputs/02/weight02.json", "r") as f:
+    with open("data/multiple_inputs/03/weight02.json", "r") as f:
         weights_2 = np.array(json.loads(f.read()))
 
     targets = np.array(
@@ -46,7 +46,7 @@ def script_1():
     m = Sequential(epoch=1)
     m.add(
         Convolutional(
-            input_shape=(1, 5, 5),
+            input_shape=(2, 5, 5),
             padding=0,
             filter_count=2,
             kernel_shape=(3, 3),
