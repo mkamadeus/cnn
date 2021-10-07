@@ -13,7 +13,7 @@ class MaxPooling(BaseLayer):
     def __init__(self, size, stride):
         self.size: Tuple[int, int] = size
         self.stride: int = stride
-        self.type = "pooling      "
+        self.type = "maxpool"
 
     def run_pooling(self, inputs):
         result = []

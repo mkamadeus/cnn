@@ -66,12 +66,6 @@ class Dense(BaseLayer):
         self.activated_output = result
         return result
 
-    def get_shape(self, input_shape=None):
-        return (1, 1, self.size)
-
-    def get_weight_count(self):
-        return len(self.weights.flatten())
-
     def compute_delta(self, delta: np.ndarray):
         # TODO: verify the truthiness of this formula.. not really sure lol
         # assume the delta is result from dE/dout
@@ -117,3 +111,12 @@ class Dense(BaseLayer):
 
         # reset delta
         self.delta = 0
+
+    def get_type(self):
+        return "dense"
+
+    def get_shape(self, input_shape=None):
+        return (1, 1, self.size)
+
+    def get_weight_count(self):
+        return len(self.weights.flatten())

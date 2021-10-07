@@ -20,7 +20,6 @@ class Sequential:
         learning_rate: float = 0.5,
         epoch: int = 10,
     ):
-        self.type = "Sequential"
         if layers is None:
             self.layers = []
         else:
@@ -116,20 +115,21 @@ class Sequential:
 
         return np.array(final_result)
 
-    def summary(self, input_shape=None):
+    def summary(self, input_shape):
         """
         🥒 Output summary.
         """
-        if input_shape is None:
-            n_channel = len(self.inputs[0])
-            length = len(self.inputs[0][0])
-            width = len(self.inputs[0][0][0])
-            input_shape = (n_channel, length, width)
+        # if input_shape is None:
+        #     n_channel = len(self.inputs[0])
+        #     length = len(self.inputs[0][0])
+        #     width = len(self.inputs[0][0][0])
+        #     input_shape = (n_channel, length, width)
         total_weight = 0
-        print(f"Model: {self.type}")
+
         print("----------------------------------------------------")
-        print("Layer (type)\t\tOutput Shape\t\tParam")
+        print("layer\t\toutput\t\t\tparam")
         print("====================================================")
+
         for index, layer in enumerate(self.layers):
             layer_type = layer.get_type()
             layer_shape, layer_weight = layer.get_shape_and_weight_count(input_shape)
@@ -138,6 +138,7 @@ class Sequential:
             if index != len(self.layers) - 1:
                 print("----------------------------------------------------")
             input_shape = layer_shape
+
         print("====================================================")
         print(f"Total param/weight: {total_weight}")
 

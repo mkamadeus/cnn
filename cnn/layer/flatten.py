@@ -8,12 +8,11 @@ class Flatten(BaseLayer):
     """
 
     def __init__(self):
-        self.type = "flatten      "
+        self.type = "flatten"
         self.shape_before = None
 
     def run(self, inputs: np.array):
         self.shape_before = inputs.shape
-        print(type(self.shape_before))
         flatten_output = inputs.flatten()
         return flatten_output
 

@@ -5,11 +5,6 @@ from cnn.layer.base import BaseLayer
 from icecream import ic
 
 
-def max_pooling_mask(view: np.ndarray, value: float, delta_value: float):
-    result = np.array([[delta_value if col == value else 0 for col in row] for row in view])
-    return result
-
-
 class AveragePooling(BaseLayer):
     """
     Defines a pooling layer consisting of inputs and kernels.
@@ -18,7 +13,7 @@ class AveragePooling(BaseLayer):
     def __init__(self, size, stride):
         self.size: Tuple[int, int] = size
         self.stride: int = stride
-        self.type = "pooling      "
+        self.type = "avgpool"
 
     def run_pooling(self, inputs):
         result = []

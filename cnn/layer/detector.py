@@ -15,7 +15,7 @@ class Detector(BaseLayer):
             raise ValueError("invalid activation mode")
 
         self.activation = activation
-        self.type = "detector     "
+        self.type = "dtctr"
 
     # TODO: multiple channels, multiple kernels
     def run(self, inputs: np.array):

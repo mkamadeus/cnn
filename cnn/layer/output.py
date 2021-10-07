@@ -18,6 +18,7 @@ class Output(BaseLayer):
 
         self.size = size
         self.error_mode = error_mode
+        self.type = "output"
 
     def run(self, inputs: np.ndarray):
         # store result

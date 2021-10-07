@@ -204,11 +204,17 @@ class Convolutional(BaseLayer):
 
         return conv_delta
 
+    def get_type(self):
+        return "conv2d"
+
     def update_weights(self, learning_rate: float):
         self.filters = self.filters - learning_rate * self.delta
         self.delta = 0
 
-    def get_shape(self):
+    def get_shape(self, input_shape=None):
+        if input_shape is None:
+            input_shape = self.input_shape
+
         length = (self.input_shape[1] + 2 * self.padding - self.kernel_shape[0]) // self.stride + 1
         width = (self.input_shape[2] + 2 * self.padding - self.kernel_shape[1]) // self.stride + 1
 
@@ -216,5 +222,5 @@ class Convolutional(BaseLayer):
 
     def get_weight_count(self):
         nb_feature_map = len(self.filters)
-        nb_channel = len(self.filters[0])
-        return nb_feature_map * ((nb_channel * self.kernel_shape[0] * self.kernel_shape[1]) + 1)
+        nb_channel = self.input_shape[0]
+        return nb_feature_map * (nb_channel * self.kernel_shape[0] * self.kernel_shape[1] + 1)
