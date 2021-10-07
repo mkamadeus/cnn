@@ -42,7 +42,7 @@ class Convolutional(BaseLayer):
         self.delta_filter = []
 
         # uniformly create a 4D random matrix based on kernel shape if no kernel is supplied
-        # with shape of (n_channels, n_filter, w_kernel_shape, h_kernel_shape)
+        # with shape of (n_filter, n_channels, w_kernel_shape, h_kernel_shape)
         if filters is None:
             self.filters = np.array(
                 generate_random_uniform_matrixes(self.filter_count, self.n_channels, self.kernel_shape)
@@ -113,6 +113,7 @@ class Convolutional(BaseLayer):
         filter_idx = 0
 
         ic(delta)
+        print(f"delta: {delta}")
 
         for d in delta:
             delta_filters = []
@@ -137,9 +138,8 @@ class Convolutional(BaseLayer):
             delta_filters = np.array(delta_filters)
             ic(delta_filters)
 
-            # Add all channel feature maps and then store on final feature
-            # maps array
-            final_delta_filters.append(add_all_feature_maps(delta_filters))
+            # Append the delta filters for this filter
+            final_delta_filters.append(delta_filters)
             ic(final_delta_filters)
 
             # increment filter index to move to the next filter
@@ -162,47 +162,41 @@ class Convolutional(BaseLayer):
         filter_idx = 0
         # ic(rotated_filters)
 
-        for r in [rotated_filters]:
-            feature_map = []
-
-            for channel_idx, input_delta in enumerate(delta):
-                # setup input with padding
+        # for every delta
+        for delta_idx, input_delta in enumerate(delta):
+            delta_inputs = []
+            # for every rotated filter on certain filter index
+            for r in rotated_filters[filter_idx]:
+                # pad the delta
                 padded = pad_array(input_delta, self.filters.shape[-1] - 1, 0)
-                # ic(self.filters.shape[-1] - 1)
-                # aka receptive fields
+                # obtain receptive fields
                 strided_views = generate_strides(padded, self.kernel_shape, stride=self.stride)
-                # ic(padded)
-                # ic(strided_views)
-                # kernels = kernels[0]
-                # ic(channel_idx)
-                # ic(r.shape)
-                multiplied_views = np.array([np.multiply(view, r[channel_idx]) for view in strided_views])
-                # ic(multiplied_views)
+                # multiply the receptive fields with rotated filter
+                multiplied_views = np.array([np.multiply(view, r) for view in strided_views])
+                ic(multiplied_views)
                 # apply convolutional multiplication
                 conv_mult_res = np.array([[np.sum(view) for view in row] for row in multiplied_views])
 
-                # save convolution multiplication to channel feature map
-                feature_map.append(conv_mult_res)
+                # save convolution multiplication to delta inputs array on this filter
+                delta_inputs.append(conv_mult_res)
 
             # convert to np.array
-            print("aaa")
-            feature_map = np.array(feature_map)
-            ic(feature_map)
+            delta_inputs = np.array(delta_inputs)
+            ic(delta_inputs)
 
-            # Add all channel feature maps and then store on final feature
-            # maps array
-            conv_delta.append(add_all_feature_maps(feature_map))
+            # Append delta input for this filter
+            conv_delta.append(delta_inputs)
             # ic(conv_delta)
 
             # increment filter index to move to the next filter
             filter_idx += 1
         conv_delta = np.array(conv_delta)
-        ic(conv_delta)
+        ic(sum(conv_delta))
 
-        # final_conv_delta = np.add(conv_delta[0], conv_delta[1])
-        # TODO: backprop fix
-
-        return conv_delta
+        # So this is element wise addition of all delta inputs, for all delta inputs
+        # within the same channel. (Inversed version of element wise addition for forward prop
+        # where within the same filter)
+        return sum(conv_delta)
 
     def get_type(self):
         return "conv2d"
