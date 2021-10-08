@@ -24,6 +24,7 @@ class Dense(BaseLayer):
             self.weights = weights
 
         self.activation = activation
+        self.velocity = 0
 
         # set delta to 0
         self.delta = 0
@@ -104,10 +105,11 @@ class Dense(BaseLayer):
 
         return delta_out_prev_layer.flatten()
 
-    def update_weights(self, learning_rate):
+    def update_weights(self, learning_rate: float, momentum: float):
         print("denseweight")
         # update weight
-        self.weights = self.weights - learning_rate * self.delta
+        self.weights = self.weights - learning_rate * self.delta + momentum * self.velocity
+        self.velocity = self.delta
 
         # reset delta
         self.delta = 0

@@ -67,5 +67,5 @@ class MaxPooling(BaseLayer):
         ic(result)
         return result
 
-    def update_weights(self, learning_rate: float):
+    def update_weights(self, learning_rate: float, momentum: float):
         pass
