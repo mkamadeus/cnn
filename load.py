@@ -1,10 +1,14 @@
 from mlxtend.data import mnist_data
 import pickle
 from icecream import ic
+import glob
 
 ic.disable()
 
-with open("model.picl", "rb") as f:
+filenames = glob.glob('*.picl')
+newest_filename = filenames[-1]
+
+with open(newest_filename, "rb") as f:
     model = pickle.load(f)
 
 print("Loading MNIST dataset...")
@@ -16,3 +20,7 @@ print(train_x[0])
 
 model.learning_rate = 0.5
 model.stochastic_run(train_x, train_y)
+
+print('Predicting data...')
+print(f"Prediction: {model.predict(train_x)}")
+print(f"True: {train_y}")
