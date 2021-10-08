@@ -1,4 +1,5 @@
 import numpy as np
+
 # from numpy import float128
 
 
@@ -28,8 +29,9 @@ def relu_derivative(x: np.ndarray):
 
 
 def softmax(layer: np.ndarray):
-    f = np.exp(layer - np.max(layer))
-    return lambda x: np.exp(x) / np.sum(np.exp(f))
+    # f = layer - np.max(layer)
+    return lambda x: np.exp(x - np.max(layer)) / np.sum(np.exp(x - np.max(layer)))
+
 
 def softmax_derivative(output: np.ndarray, target_class: int):
     """

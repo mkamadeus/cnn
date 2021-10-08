@@ -87,7 +87,7 @@ def test_softmax():
 
     softmax_fun = softmax(layer)
 
-    assert np.sum(softmax_fun(layer)) == 1.0
+    assert np.testing.assert_allclose(np.sum(softmax_fun(layer)), 1.0) is None
 
 
 def test_softmax_derivative():
