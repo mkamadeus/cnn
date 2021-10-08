@@ -24,5 +24,5 @@ class Flatten(BaseLayer):
         print(f"delta.reshape(self.shape_before): {delta.reshape(self.shape_before)}")
         return delta.reshape(self.shape_before)
 
-    def update_weights(self, learning_rate: float):
+    def update_weights(self, learning_rate: float, momentum: float):
         pass

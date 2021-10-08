@@ -32,5 +32,5 @@ class Detector(BaseLayer):
     def compute_delta(self, delta: np.ndarray):
         return delta
 
-    def update_weights(self, learning_rate: float):
+    def update_weights(self, learning_rate: float, momentum: float):
         pass

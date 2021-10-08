@@ -39,6 +39,8 @@ class Convolutional(BaseLayer):
         self.inputs = None
         self.outputs = None
 
+        self.velocity = 0
+
         self.delta_filter = []
 
         # uniformly create a 4D random matrix based on kernel shape if no kernel is supplied
@@ -204,10 +206,11 @@ class Convolutional(BaseLayer):
     def get_type(self):
         return "conv2d"
 
-    def update_weights(self, learning_rate: float):
+    def update_weights(self, learning_rate: float, momentum: float):
         # print(f"filters shape: {self.filters.shape}")
         # print(f"delta shape: {self.delta.shape}")
-        self.filters = self.filters - learning_rate * self.delta
+        self.filters = self.filters - learning_rate * self.delta + momentum * self.velocity
+        self.velocity = self.delta
         self.delta = 0
 
     def get_shape(self, input_shape=None):

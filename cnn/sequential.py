@@ -17,7 +17,8 @@ class Sequential:
     def __init__(
         self,
         layers: List[BaseLayer] = None,
-        learning_rate: float = 0.5,
+        learning_rate: float = 0.01,
+        momentum: float = 0.0,
         epoch: int = 10,
     ):
         if layers is None:
@@ -26,6 +27,7 @@ class Sequential:
             self.layers = layers
 
         self.learning_rate = learning_rate
+        self.momentum = momentum
         self.epoch = epoch
 
     def add(self, layer: BaseLayer):
@@ -169,7 +171,7 @@ class Sequential:
         """
         for idx, layer in enumerate(self.layers):
             ic(idx)
-            layer.update_weights(self.learning_rate)
+            layer.update_weights(self.learning_rate, self.momentum)
 
     def save(self, filename: str = "model"):
         """
