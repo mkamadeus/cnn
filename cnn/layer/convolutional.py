@@ -159,8 +159,8 @@ class Convolutional(BaseLayer):
         # ic(np.rot90(self.filters,k=2, axes=(0,1)))
         ic(np.rot90(self.filters, k=2, axes=(-2, -1)))
         rotated_filters = np.rot90(self.filters, k=2, axes=(-2, -1))
-        print(f"self.filters.shape: {self.filters.shape}")
-        print(f"rotated_filters[1]: {rotated_filters[1]}")
+        # print(f"self.filters.shape: {self.filters.shape}")
+        # print(f"rotated_filters[1]: {rotated_filters[1]}")
         # print(final_delta_filters)
 
         conv_delta = []

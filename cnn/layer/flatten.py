@@ -21,7 +21,7 @@ class Flatten(BaseLayer):
         return (1, 1, input_shape[0] * input_shape[1] * input_shape[2])
 
     def compute_delta(self, delta: np.array):
-        print(f"delta.reshape(self.shape_before): {delta.reshape(self.shape_before)}")
+        # print(f"delta.reshape(self.shape_before): {delta.reshape(self.shape_before)}")
         return delta.reshape(self.shape_before)
 
     def update_weights(self, learning_rate: float, momentum: float):
