@@ -22,7 +22,7 @@ print(train_x[0])
 # input shape (1,28,28)
 print(f"Dataset loaded with shape {train_x.shape}")
 
-model = Sequential()
+model = Sequential(epoch=2)
 model.add(Convolutional(input_shape=(1, 28, 28), padding=0, stride=1, filter_count=2, kernel_shape=(3, 3)))
 model.add(Detector(activation="sigmoid"))
 model.add(MaxPooling(size=(2, 2), stride=2))

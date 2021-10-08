@@ -5,6 +5,7 @@ from icecream import ic
 import numpy as np
 from tqdm import tqdm
 import pickle
+import time
 
 from cnn.layer.output import Output
 
@@ -17,7 +18,7 @@ class Sequential:
     def __init__(
         self,
         layers: List[BaseLayer] = None,
-        learning_rate: float = 0.01,
+        learning_rate: float = 0.5,
         momentum: float = 0.0,
         epoch: int = 1,
     ):
@@ -43,9 +44,9 @@ class Sequential:
         if len(inputs) != len(targets):
             raise ValueError("input count and target count not equal")
 
-        for _ in tqdm(range(self.epoch)):
+        for _ in range(self.epoch):
             current_result = []
-            for target, input_data in list(zip(targets, inputs)):
+            for target, input_data in tqdm(list(zip(targets, inputs))):
                 r = self.forward_phase(input_data)
                 self.backward_phase(target)
                 self.update_weights()
@@ -53,6 +54,7 @@ class Sequential:
 
             current_result = np.array(current_result)
             print(f"Error : {mean_sum_squared_error(current_result, targets)}")
+            self.save(f"{int(time.time())}-model.picl")
 
     def batch_run(self, inputs: np.ndarray, targets: np.ndarray):
         """
@@ -88,7 +90,7 @@ class Sequential:
         """
         result = []
 
-        for input_data in inputs:
+        for input_data in tqdm(inputs):
             # forward propagation
             self.forward_phase(input_data)
 
