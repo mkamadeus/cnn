@@ -1,11 +1,14 @@
 import idx2numpy
 from cnn.utils import load_model
 import pandas as pd
+from icecream import ic
+
+ic.disable()
 
 test_data = idx2numpy.convert_from_file("t10k-images.idx3-ubyte") / 255.0
 reshaped = test_data.reshape(len(test_data), 1, 28, 28)
 
-model = load_model("1633690450-model")
+model = load_model("1633693286-model")
 print("prediction")
 prediction = model.predict(reshaped)
 
