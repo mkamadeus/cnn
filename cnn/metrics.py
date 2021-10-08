@@ -51,6 +51,8 @@ def f1(y_true, y_pred):
     return f1_score
 
 
+
+
 y_t = np.array([1, 1, 1, 1, 1, 0, 1, 0, 0, 1])
 y_p = np.array([1, 1, 1, 0, 0, 1, 0, 1, 0, 0])
 
@@ -67,3 +69,42 @@ print(precision_score(y_t, y_p))
 print(recall_score(y_t, y_p))
 print(f1_score(y_t, y_p))
 
+
+# Multiclass
+# def compute_tp_tn_fn_fp(y_true, y_pred):
+#     '''
+#     True positive - actual = 1, predicted = 1
+#     False positive - actual = 1, predicted = 0
+#     False negative - actual = 0, predicted = 1
+#     True negative - actual = 0, predicted = 0
+#     '''
+#     tp = sum((y_true == 1) & (y_pred == 1))
+#     tn = sum((y_true == 0) & (y_pred == 0))
+#     fn = sum((y_true == 1) & (y_pred == 0))
+#     fp = sum((y_true == 0) & (y_pred == 1))
+#     return tp, tn, fp, fn
+
+# def acc_score(y_true, y_pred):
+#     a = pd.crosstab(y_true, y_pred)
+#     print(a.max(axis=1)/a.sum(axis=1))
+
+# def prec_score(y_true, y_pred):
+#     i = set(y_true).intersection(y_pred)
+#     len1 = len(y_pred)
+#     if len1 == 0:
+#         return 0
+#     else:
+#         return len(i) / len1
+
+
+# def rec_score(y_true, y_pred):
+#     i = set(y_true).intersection(y_pred)
+#     return len(i) / len(y_true)
+
+# def f1(y_true, y_pred):
+#     p = prec_score(y_true, y_pred)
+#     r = recall_score(y_true, y_pred)
+#     if p + r == 0:
+#         return 0
+#     else:
+#         return 2 * (p * r) / (p + r)
