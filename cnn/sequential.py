@@ -19,7 +19,7 @@ class Sequential:
         layers: List[BaseLayer] = None,
         learning_rate: float = 0.01,
         momentum: float = 0.0,
-        epoch: int = 10,
+        epoch: int = 1,
     ):
         if layers is None:
             self.layers = []

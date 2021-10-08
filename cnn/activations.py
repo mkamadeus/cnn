@@ -1,4 +1,5 @@
 import numpy as np
+# from numpy import float128
 
 
 def sigmoid(x: np.ndarray):
@@ -27,8 +28,8 @@ def relu_derivative(x: np.ndarray):
 
 
 def softmax(layer: np.ndarray):
-    return lambda x: np.exp(x) / np.sum(np.exp(layer))
-
+    f = np.exp(layer - np.max(layer))
+    return lambda x: np.exp(x) / np.sum(np.exp(f))
 
 def softmax_derivative(output: np.ndarray, target_class: int):
     """
