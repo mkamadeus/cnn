@@ -1,7 +1,5 @@
 import numpy as np
 
-# from numpy import float128
-
 
 def sigmoid(x: np.ndarray):
     x = np.clip(x, -500, 500)
@@ -40,3 +38,8 @@ def softmax_derivative(output: np.ndarray, target_class: int):
     target_arr = np.zeros(output.shape)
     target_arr[target_class] = 1.0
     return output - target_arr
+
+
+def tanh(x: np.ndarray):
+    tanh = np.vectorize(np.math.tanh)
+    return tanh(x)
