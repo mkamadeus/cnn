@@ -75,4 +75,4 @@ class LSTM(BaseLayer):
         return (1, 1, self.size)
 
     def get_weight_count(self):
-        return len(self.weights.flatten())
+        return 4 * (self.input_size * self.size + self.size * self.size + self.size)
