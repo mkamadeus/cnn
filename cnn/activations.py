@@ -41,5 +41,4 @@ def softmax_derivative(output: np.ndarray, target_class: int):
 
 
 def tanh(x: np.ndarray):
-    tanh = np.vectorize(np.math.tanh)
-    return tanh(x)
+    return np.tanh(x)
