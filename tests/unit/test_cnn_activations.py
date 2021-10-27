@@ -7,6 +7,7 @@ from cnn.activations import (
     relu_derivative,
     softmax,
     softmax_derivative,
+    tanh,
 )
 import numpy as np
 
@@ -122,3 +123,10 @@ def test_softmax_derivative():
     )
     result = softmax_derivative(output, target)
     assert np.testing.assert_array_almost_equal(result, expected) is None
+
+
+def test_tanh():
+    result = tanh(np.array([[1.150]]))
+    expected = np.array([[0.818]])
+
+    assert np.testing.assert_allclose(result, expected, rtol=1e-03) is None
