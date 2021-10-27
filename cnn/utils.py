@@ -40,6 +40,13 @@ def generate_strides(mat: np.array, kernel_size: Tuple[int, int], stride: int = 
     return result
 
 
+def generate_random_uniform_matrixes_lstm(size: tuple):
+    """
+    Generates random uniform matrix for lstm weight
+    """
+    return np.random.uniform(low=-1.0, high=1.0, size=size)
+
+
 def generate_random_uniform_matrixes(
     n_filter: int, n_channel: int, size: Tuple[int, int]
 ):
