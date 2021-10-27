@@ -45,7 +45,7 @@ class Sequential:
             raise ValueError("input count and target count not equal")
 
         for idx in range(self.epoch):
-            print(f'Epoch {idx+1}/{self.epoch}')
+            print(f"Epoch {idx+1}/{self.epoch}")
             current_result = []
             for target, input_data in tqdm(list(zip(targets, inputs))):
                 r = self.forward_phase(input_data)
