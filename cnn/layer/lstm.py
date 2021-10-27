@@ -1,6 +1,7 @@
 import numpy as np
 from cnn.activations import linear, relu_derivative, sigmoid, relu, sigmoid_derivative, softmax, linear_derivative, tanh
 from cnn.layer.base import BaseLayer
+from cnn.utils import generate_random_uniform_matrixes_lstm
 from icecream import ic
 
 
@@ -9,33 +10,42 @@ class LSTM(BaseLayer):
     Defines a LSTM layer.
     """
 
-    def __init__(self, size, input_size):
+    def __init__(self, size: int, input_size: tuple):
         self.size = size
-        self.input_size = input_size
 
+        if len(input_size) != 2:
+            raise ValueError(f"The input size should be defined on 2D shape. Found {len(input_size)}D shape.")
+
+        self.input_size = input_size
+        self.n_features = input_size[1]
+        self.init_random_weight()
+
+    def init_random_weight(self):
         # initialize forget gate related stuff (h)
-        self.forget_weight = np.zeros((input_size, size))
-        self.forget_recurrent_weight = np.zeros((size, size))
-        self.forget_state = np.zeros(input_size)
-        self.forget_bias = np.zeros(size)
+        self.forget_weight = generate_random_uniform_matrixes_lstm((self.size, self.n_features))
+        self.forget_recurrent_weight = generate_random_uniform_matrixes_lstm((self.size, self.size))
+        # kayaknya ga dipake
+        # self.forget_state = generate_random_uniform_matrixes_lstm(self.input_size)
+        self.forget_bias = generate_random_uniform_matrixes_lstm((self.size, 1))
 
         # initialize input gate related stuff(i)
-        self.input_weight = np.zeros((input_size, size))
-        self.input_recurrent_weight = np.zeros((size, size))
-        self.input_state = np.zeros(input_size)
-        self.input_bias = np.zeros(size)
+        self.input_weight = generate_random_uniform_matrixes_lstm((self.size, self.n_features))
+        self.input_recurrent_weight = generate_random_uniform_matrixes_lstm((self.size, self.size))
+        # kayaknya ga dipake
+        # self.input_state = generate_random_uniform_matrixes_lstm(self.input_size)
+        self.input_bias = generate_random_uniform_matrixes_lstm((self.size, 1))
 
         # initialize cell state
-        self.cell_weight = np.zeros((input_size, size))
-        self.cell_recurrent_weight = np.zeros((size, size))
-        self.cell_state = np.zeros(input_size)
-        self.cell_bias = np.zeros(size)
+        self.cell_weight = generate_random_uniform_matrixes_lstm((self.size, self.n_features))
+        self.cell_recurrent_weight = generate_random_uniform_matrixes_lstm((self.size, self.size))
+        self.cell_state = np.zeros((self.size, 1))
+        self.cell_bias = generate_random_uniform_matrixes_lstm((self.size, 1))
 
         # initialize cell state
-        self.output_weight = np.zeros((input_size, size))
-        self.output_recurrent_weight = np.zeros((size, size))
-        self.output_state = np.zeros(input_size)
-        self.output_bias = np.zeros(size)
+        self.output_weight = generate_random_uniform_matrixes_lstm((self.size, self.n_features))
+        self.output_recurrent_weight = generate_random_uniform_matrixes_lstm((self.size, self.size))
+        self.output_state = np.zeros((self.size, 1))
+        self.output_bias = generate_random_uniform_matrixes_lstm((self.size, 1))
 
     def run(self, inputs: np.array) -> np.ndarray:
         # precalculations  (self.hidden_state is previous hidden state)
@@ -49,7 +59,7 @@ class LSTM(BaseLayer):
 
         # input gate
         self.input_gate = sigmoid(uix_wih + self.input_bias)
-        self.input_gate = sigmoid(self.input_gate)
+        # self.input_gate = sigmoid(self.input_gate)
 
         # cell state (self.cell_state is previous cell state, being set to current cell state)
         cell_tmp_state = tanh(ucx_wch + self.cell_bias)
