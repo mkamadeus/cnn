@@ -10,11 +10,23 @@ class LSTM(BaseLayer):
     Defines a LSTM layer.
     """
 
-    def __init__(self, size: int, input_size: tuple):
+    def __init__(self, size: int, input_size: tuple, recurrent_weights=None, into_weights=None):
         self.size = size
 
         if len(input_size) != 2:
             raise ValueError(f"The input size should be defined on 2D shape. Found {len(input_size)}D shape.")
+        if recurrent_weights is None:
+            # init random recurrent weights
+            pass
+        else:
+            # ngeassign satu-satu ke weightnya
+            pass
+        if into_weights is None:
+            # init random U weights
+            pass
+        else:
+            # ngeassign satu-satu ke weightnya
+            pass
 
         self.input_size = input_size
         self.n_features = input_size[1]
@@ -74,7 +86,7 @@ class LSTM(BaseLayer):
         # set hidden state (self.hidden_state being set to current hidden state)
         self.hidden_state = self.output_state * tanh(self.cell_state)
 
-        return self.cell_state
+        return self.hidden_state
 
     def compute_delta(self, delta: np.ndarray):
         pass
@@ -89,4 +101,4 @@ class LSTM(BaseLayer):
         return (1, 1, self.size)
 
     def get_weight_count(self):
-        return 4 * (self.input_size * self.size + self.size * self.size + self.size)
+        return 4 * self.size * (self.n_features + self.size + 1)
