@@ -39,6 +39,7 @@ class LSTM(BaseLayer):
         self.cell_weight = generate_random_uniform_matrixes_lstm((self.size, self.n_features))
         self.cell_recurrent_weight = generate_random_uniform_matrixes_lstm((self.size, self.size))
         self.cell_state = np.zeros((self.size, 1))
+        self.hidden_state = np.zeros((self.size, 1))
         self.cell_bias = generate_random_uniform_matrixes_lstm((self.size, 1))
 
         # initialize cell state
@@ -49,10 +50,11 @@ class LSTM(BaseLayer):
 
     def run(self, inputs: np.array) -> np.ndarray:
         # precalculations  (self.hidden_state is previous hidden state)
-        ufx_wfh = np.matmul(self.forget_weight, inputs) + np.matmul(self.forget_reccurent_weight, self.hidden_state)
-        uix_wih = np.matmul(self.input_weight, inputs) + np.matmul(self.input_reccurent_weight, self.hidden_state)
-        ucx_wch = np.matmul(self.cell_weight, inputs) + np.matmul(self.cell_reccurent_weight, self.hidden_state)
-        uox_woh = np.matmul(self.output_weight, inputs) + np.matmul(self.output_reccurent_weight, self.hidden_state)
+        ufx_wfh = np.matmul(self.forget_weight, inputs) + np.matmul(self.forget_recurrent_weight, self.hidden_state)
+        ic(ufx_wfh)
+        uix_wih = np.matmul(self.input_weight, inputs) + np.matmul(self.input_recurrent_weight, self.hidden_state)
+        ucx_wch = np.matmul(self.cell_weight, inputs) + np.matmul(self.cell_recurrent_weight, self.hidden_state)
+        uox_woh = np.matmul(self.output_weight, inputs) + np.matmul(self.output_recurrent_weight, self.hidden_state)
 
         # forget gate
         self.forget_gate = sigmoid(ufx_wfh + self.forget_bias)
@@ -71,6 +73,8 @@ class LSTM(BaseLayer):
 
         # set hidden state (self.hidden_state being set to current hidden state)
         self.hidden_state = self.output_state * tanh(self.cell_state)
+
+        return self.cell_state
 
     def compute_delta(self, delta: np.ndarray):
         pass
