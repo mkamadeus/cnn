@@ -60,10 +60,29 @@ class LSTM(BaseLayer):
         self.output_state = np.zeros((self.size, 1))
         self.output_bias = generate_random_uniform_matrixes_lstm((self.size, 1))
 
+        # for testing purpose only
+        # komen aja ntar
+        self.forget_weight = np.array([[0.7,0.45], [0.95,0.8], [0.45, 0.25], [0.6, 0.4]])
+        self.forget_recurrent_weight = np.array([0])
+        self.hidden_state = np.array([0])
+        self.cell_bias = np.array([[0.15,0.65,0.2,0.1]])
+
     def run(self, inputs: np.array) -> np.ndarray:
         # precalculations  (self.hidden_state is previous hidden state)
-        ufx_wfh = np.matmul(self.forget_weight, inputs) + np.matmul(self.forget_recurrent_weight, self.hidden_state)
-        ic(ufx_wfh)
+
+        # ic(len(inputs))
+        # iterasi tiap input = iterasi tiap timestep
+        for inp in inputs:
+            ic(self.forget_weight)
+            ic(inputs)
+            ic(self.forget_recurrent_weight)
+            ic(self.hidden_state)
+            # ufx_wfh = np.matmul(self.forget_weight, inputs) + np.matmul(self.forget_recurrent_weight, self.hidden_state)
+            ufx_wfh = np.matmul(self.forget_weight, inp.T) + np.matmul(self.forget_recurrent_weight, self.hidden_state)
+            net_gt = np.add(ufx_wfh, self.cell_bias)
+            ic(ufx_wfh)
+            ic(net_gt)
+
         uix_wih = np.matmul(self.input_weight, inputs) + np.matmul(self.input_recurrent_weight, self.hidden_state)
         ucx_wch = np.matmul(self.cell_weight, inputs) + np.matmul(self.cell_recurrent_weight, self.hidden_state)
         uox_woh = np.matmul(self.output_weight, inputs) + np.matmul(self.output_recurrent_weight, self.hidden_state)
