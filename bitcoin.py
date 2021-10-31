@@ -29,7 +29,9 @@ def preprocess():
         labels = np.append(labels, label, axis=0)
         # break
 
+    ic(windows.shape)
     ic(windows)
+    ic(labels.shape)
     ic(labels)
 
     return windows, labels
