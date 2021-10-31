@@ -36,8 +36,8 @@ class LSTM(BaseLayer):
         self.biases = generate_random_uniform_matrixes_lstm((4, self.size, 1))
 
         # init states
-        self.cell_state = np.zeros((self.size, 1))
-        self.hidden_state = np.zeros((self.size, 1))
+        self.cell_state = np.zeros((self.size, self.size))
+        self.hidden_state = np.zeros((self.size, self.size))
 
         # for testing purpose only
         # komen aja ntar
