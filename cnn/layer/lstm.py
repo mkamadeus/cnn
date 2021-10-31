@@ -63,7 +63,7 @@ class LSTM(BaseLayer):
         # for testing purpose only
         # komen aja ntar
         self.forget_weight = np.array([[0.7,0.45], [0.95,0.8], [0.45, 0.25], [0.6, 0.4]])
-        self.forget_recurrent_weight = np.array([0])
+        self.forget_recurrent_weight = np.array([[0.1, 0.8, 0.15, 0.25]])
         self.hidden_state = np.array([0])
         self.cell_bias = np.array([[0.15,0.65,0.2,0.1]])
 
@@ -71,14 +71,15 @@ class LSTM(BaseLayer):
         # precalculations  (self.hidden_state is previous hidden state)
 
         # iterasi tiap input = iterasi tiap timestep
-        prev_gate_weight = []
+
         for inp in inputs:
             ic(self.forget_weight)
             ic(inputs)
             ic(self.forget_recurrent_weight)
             ic(self.hidden_state)
             # ufx_wfh = np.matmul(self.forget_weight, inputs) + np.matmul(self.forget_recurrent_weight, self.hidden_state)
-            wfh = np.matmul(self.forget_recurrent_weight, self.hidden_state)
+            wfh = np.matmul(self.hidden_state, self.forget_recurrent_weight)
+            ic(wfh)
             ufx_wfh = np.matmul(self.forget_weight, inp.T) + wfh
 
             # ufx + wfh + bias
@@ -100,7 +101,7 @@ class LSTM(BaseLayer):
 
             ic(self.cell_state)
 
-            self.hidden_state = gt[3] * tanh(self.cell_state)
+            self.hidden_state = (gt[3] * tanh(self.cell_state)).flatten()
             ic(self.hidden_state)
             # self.cell_state = self.forget_gate * self.cell_state + cell_tmp_state
 
