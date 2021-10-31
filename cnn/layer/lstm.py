@@ -70,40 +70,61 @@ class LSTM(BaseLayer):
     def run(self, inputs: np.array) -> np.ndarray:
         # precalculations  (self.hidden_state is previous hidden state)
 
-        # ic(len(inputs))
         # iterasi tiap input = iterasi tiap timestep
+        prev_gate_weight = []
         for inp in inputs:
             ic(self.forget_weight)
             ic(inputs)
             ic(self.forget_recurrent_weight)
             ic(self.hidden_state)
             # ufx_wfh = np.matmul(self.forget_weight, inputs) + np.matmul(self.forget_recurrent_weight, self.hidden_state)
-            ufx_wfh = np.matmul(self.forget_weight, inp.T) + np.matmul(self.forget_recurrent_weight, self.hidden_state)
-            net_gt = np.add(ufx_wfh, self.cell_bias)
+            wfh = np.matmul(self.forget_recurrent_weight, self.hidden_state)
+            ufx_wfh = np.matmul(self.forget_weight, inp.T) + wfh
+
+            # ufx + wfh + bias
+            net_gt = np.add(ufx_wfh, self.cell_bias)[0]
+            
+            gt = []
+            for idx, net in enumerate(net_gt):
+                if idx == 2:
+                    gt.append(tanh(net))
+                elif idx != 2:
+                    gt.append(sigmoid(net))
+            
+            gt = np.array(gt)
             ic(ufx_wfh)
             ic(net_gt)
+            ic(gt)
+            ic(self.cell_state)
+            self.cell_state = gt[0] * self.cell_state + gt[1] * gt[2]
 
-        uix_wih = np.matmul(self.input_weight, inputs) + np.matmul(self.input_recurrent_weight, self.hidden_state)
-        ucx_wch = np.matmul(self.cell_weight, inputs) + np.matmul(self.cell_recurrent_weight, self.hidden_state)
-        uox_woh = np.matmul(self.output_weight, inputs) + np.matmul(self.output_recurrent_weight, self.hidden_state)
+            ic(self.cell_state)
 
-        # forget gate
-        self.forget_gate = sigmoid(ufx_wfh + self.forget_bias)
+            self.hidden_state = gt[3] * tanh(self.cell_state)
+            ic(self.hidden_state)
+            # self.cell_state = self.forget_gate * self.cell_state + cell_tmp_state
 
-        # input gate
-        self.input_gate = sigmoid(uix_wih + self.input_bias)
-        # self.input_gate = sigmoid(self.input_gate)
+        # uix_wih = np.matmul(self.input_weight, inputs) + np.matmul(self.input_recurrent_weight, self.hidden_state)
+        # ucx_wch = np.matmul(self.cell_weight, inputs) + np.matmul(self.cell_recurrent_weight, self.hidden_state)
+        # uox_woh = np.matmul(self.output_weight, inputs) + np.matmul(self.output_recurrent_weight, self.hidden_state)
 
-        # cell state (self.cell_state is previous cell state, being set to current cell state)
-        cell_tmp_state = tanh(ucx_wch + self.cell_bias)
-        cell_tmp_state = cell_tmp_state * self.input_gate
-        self.cell_state = self.forget_gate * self.cell_state + cell_tmp_state
+        # # forget gate
+        # self.forget_gate = sigmoid(ufx_wfh + self.forget_bias)
 
-        # output gate
-        self.output_state = sigmoid(uox_woh + self.output_bias)
+        # # input gate
+        # self.input_gate = sigmoid(uix_wih + self.input_bias)
+        # # self.input_gate = sigmoid(self.input_gate)
 
-        # set hidden state (self.hidden_state being set to current hidden state)
-        self.hidden_state = self.output_state * tanh(self.cell_state)
+        # # cell state (self.cell_state is previous cell state, being set to current cell state)
+        # cell_tmp_state = tanh(ucx_wch + self.cell_bias)
+        # cell_tmp_state = cell_tmp_state * self.input_gate
+        # self.cell_state = self.forget_gate * self.cell_state + cell_tmp_state
+
+        # # output gate
+        # self.output_state = sigmoid(uox_woh + self.output_bias)
+
+        # # set hidden state (self.hidden_state being set to current hidden state)
+        # self.hidden_state = self.output_state * tanh(self.cell_state)
 
         return self.hidden_state
 
