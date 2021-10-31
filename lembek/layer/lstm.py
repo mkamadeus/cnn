@@ -18,57 +18,37 @@ class LSTM(BaseLayer):
 
         if len(input_size) != 2:
             raise ValueError(f"The input size should be defined on 2D shape. Found {len(input_size)}D shape.")
-        if recurrent_weights is None:
-            # init random recurrent weights
-            pass
-        else:
-            # ngeassign satu-satu ke weightnya
-            pass
-        if into_weights is None:
-            # init random U weights
-            pass
-        else:
-            # ngeassign satu-satu ke weightnya
-            pass
 
         self.input_size = input_size
         self.n_features = input_size[1]
         self.init_random_weight()
 
     def init_random_weight(self):
-        # initialize forget gate related stuff (h)
-        self.forget_weight = generate_random_uniform_matrixes_lstm((self.size, self.n_features))
-        self.forget_recurrent_weight = generate_random_uniform_matrixes_lstm((self.size, self.size))
-        # kayaknya ga dipake
-        # self.forget_state = generate_random_uniform_matrixes_lstm(self.input_size)
-        self.forget_bias = generate_random_uniform_matrixes_lstm((self.size, 1))
+        # divided into 4 slots, 0: forget gate, 1: input gate, 2: cell state, 3: output gate
 
-        # initialize input gate related stuff(i)
-        self.input_weight = generate_random_uniform_matrixes_lstm((self.size, self.n_features))
-        self.input_recurrent_weight = generate_random_uniform_matrixes_lstm((self.size, self.size))
-        # kayaknya ga dipake
-        # self.input_state = generate_random_uniform_matrixes_lstm(self.input_size)
-        self.input_bias = generate_random_uniform_matrixes_lstm((self.size, 1))
+        # init weights (U)
+        self.weights = generate_random_uniform_matrixes_lstm((4, self.size, self.n_features))
 
-        # initialize cell state
-        self.cell_weight = generate_random_uniform_matrixes_lstm((self.size, self.n_features))
-        self.cell_recurrent_weight = generate_random_uniform_matrixes_lstm((self.size, self.size))
+        # init recurrent weights (W)
+        self.recurrent_weights = generate_random_uniform_matrixes_lstm((4, self.size, self.n_features))
+
+        # init biases (b)
+        self.biases = generate_random_uniform_matrixes_lstm((4, self.size, 1))
+
+        # init states
         self.cell_state = np.zeros((self.size, 1))
         self.hidden_state = np.zeros((self.size, 1))
-        self.cell_bias = generate_random_uniform_matrixes_lstm((self.size, 1))
-
-        # initialize cell state
-        self.output_weight = generate_random_uniform_matrixes_lstm((self.size, self.n_features))
-        self.output_recurrent_weight = generate_random_uniform_matrixes_lstm((self.size, self.size))
-        self.output_state = np.zeros((self.size, 1))
-        self.output_bias = generate_random_uniform_matrixes_lstm((self.size, 1))
 
         # for testing purpose only
         # komen aja ntar
-        # self.forget_weight = np.array([[0.7, 0.45], [0.95, 0.8], [0.45, 0.25], [0.6, 0.4]])
-        # self.forget_recurrent_weight = np.array([[0.1, 0.8, 0.15, 0.25]])
-        # self.hidden_state = np.array([0])
-        # self.cell_bias = np.array([[0.15, 0.65, 0.2, 0.1]])
+        self.weights = np.array([[[0.7, 0.45]], [[0.95, 0.8]], [[0.45, 0.25]], [[0.6, 0.4]]])
+
+        self.recurrent_weights = np.array([[[0.1]], [[0.8]], [[0.15]], [[0.25]]])
+
+        self.biases = np.array([[[0.15]], [[0.65]], [[0.2]], [[0.1]]])
+
+        self.hidden_state = np.array([[0]])
+        self.cell_state = np.array([[0]])
 
     def run(self, inputs: np.array) -> np.ndarray:
         # precalculations  (self.hidden_state is previous hidden state)
@@ -76,35 +56,36 @@ class LSTM(BaseLayer):
         # iterasi tiap input = iterasi tiap timestep
 
         for inp in inputs:
-            ic(self.forget_weight)
-            ic(self.forget_recurrent_weight)
+            ic(self.weights)
+            ic(self.recurrent_weights)
             ic(self.hidden_state)
             # ufx_wfh = np.matmul(self.forget_weight, inputs) + np.matmul(self.forget_recurrent_weight, self.hidden_state)
-            wfh = np.matmul(self.hidden_state, self.forget_recurrent_weight)
-            ic(wfh)
+            wh = np.matmul(self.hidden_state, self.recurrent_weights)
+            ic(wh)
             ic(inp)
-            ufx_wfh = np.add(np.matmul(self.forget_weight, inp.T), wfh)
+            # should reshape input because this input will be distributed to all gates
+            ux_wh = np.add(np.matmul(self.weights, inp.T.reshape(-1, 1)), wh)
+            ic(np.matmul(self.weights, inp.T.reshape(-1, 1)))
+            ic(ux_wh)
 
             # ufx + wfh + bias
-            net_gt = np.add(ufx_wfh, self.cell_bias)[0]
+            nets = np.add(ux_wh, self.biases)
+            ic(nets)
 
-            gt = []
-            for idx, net in enumerate(net_gt):
+            gates = []
+            for idx, net in enumerate(nets):
                 if idx == 2:
-                    gt.append(tanh(net))
+                    gates.append(tanh(net))
                 elif idx != 2:
-                    gt.append(sigmoid(net))
+                    gates.append(sigmoid(net))
 
-            gt = np.array(gt)
-            ic(ufx_wfh)
-            ic(net_gt)
-            ic(gt)
-            ic(self.cell_state)
-            self.cell_state = gt[0] * self.cell_state + gt[1] * gt[2]
+            gates = np.array(gates)
+            ic(gates)
+            self.cell_state = gates[0] * self.cell_state + gates[1] * gates[2]
 
             ic(self.cell_state)
 
-            self.hidden_state = (gt[3] * tanh(self.cell_state)).flatten()
+            self.hidden_state = gates[3] * tanh(self.cell_state)
             ic(self.hidden_state)
             # self.cell_state = self.forget_gate * self.cell_state + cell_tmp_state
 
