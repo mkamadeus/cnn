@@ -1,6 +1,6 @@
 import numpy as np
-from cnn.layer import Dense
-from cnn.activations import softmax_derivative
+from lembek.layer import Dense
+from lembek.activations import softmax_derivative
 from icecream import ic
 
 

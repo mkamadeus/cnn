@@ -1,5 +1,5 @@
-from cnn.layer.base import BaseLayer
-from cnn.utils import generate_strides, pad_array, generate_random_uniform_matrixes, add_all_feature_maps
+from lembek.layer.base import BaseLayer
+from lembek.utils import generate_strides, pad_array, generate_random_uniform_matrixes, add_all_feature_maps
 import numpy as np
 from typing import Tuple
 from icecream import ic

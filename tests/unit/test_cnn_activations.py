@@ -1,4 +1,4 @@
-from cnn.activations import (
+from lembek.activations import (
     sigmoid,
     sigmoid_derivative,
     linear,

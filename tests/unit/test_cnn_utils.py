@@ -1,5 +1,5 @@
 import numpy as np
-from cnn.utils import (
+from lembek.utils import (
     generate_strides,
     pad_array,
     generate_random_uniform_matrixes,

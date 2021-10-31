@@ -1,4 +1,4 @@
-from cnn.layer.pooling import MaxPooling, AveragePooling
+from lembek.layer.pooling import MaxPooling, AveragePooling
 import pytest
 import numpy as np
 

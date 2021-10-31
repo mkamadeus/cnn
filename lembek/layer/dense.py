@@ -1,6 +1,6 @@
 import numpy as np
-from cnn.activations import linear, relu_derivative, sigmoid, relu, sigmoid_derivative, softmax, linear_derivative
-from cnn.layer.base import BaseLayer
+from lembek.activations import linear, relu_derivative, sigmoid, relu, sigmoid_derivative, softmax, linear_derivative
+from lembek.layer.base import BaseLayer
 from icecream import ic
 
 ACTIVATION_MODES = ["relu", "sigmoid", "softmax", "linear"]

@@ -1,5 +1,5 @@
 import numpy as np
-from cnn.layer import Output
+from lembek.layer import Output
 
 
 def test_logloss_output():

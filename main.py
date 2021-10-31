@@ -1,7 +1,7 @@
-from cnn import Sequential
-from cnn.layer import Convolutional, Detector, Flatten, Dense, Output
-from cnn.layer.pooling import MaxPooling
-from cnn.utils import load_model
+from lembek import Sequential
+from lembek.layer import Convolutional, Detector, Flatten, Dense, Output
+from lembek.layer.pooling import MaxPooling
+from lembek.utils import load_model
 from icecream import ic
 import json
 import numpy as np

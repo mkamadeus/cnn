@@ -1,7 +1,10 @@
 import numpy as np
-from cnn.activations import linear, relu_derivative, sigmoid, relu, sigmoid_derivative, softmax, linear_derivative, tanh
-from cnn.layer.base import BaseLayer
-from cnn.utils import generate_random_uniform_matrixes_lstm
+from lembek.activations import (
+    sigmoid,
+    tanh,
+)
+from lembek.layer.base import BaseLayer
+from lembek.utils import generate_random_uniform_matrixes_lstm
 from icecream import ic
 
 
@@ -62,10 +65,10 @@ class LSTM(BaseLayer):
 
         # for testing purpose only
         # komen aja ntar
-        self.forget_weight = np.array([[0.7,0.45], [0.95,0.8], [0.45, 0.25], [0.6, 0.4]])
+        self.forget_weight = np.array([[0.7, 0.45], [0.95, 0.8], [0.45, 0.25], [0.6, 0.4]])
         self.forget_recurrent_weight = np.array([[0.1, 0.8, 0.15, 0.25]])
         self.hidden_state = np.array([0])
-        self.cell_bias = np.array([[0.15,0.65,0.2,0.1]])
+        self.cell_bias = np.array([[0.15, 0.65, 0.2, 0.1]])
 
     def run(self, inputs: np.array) -> np.ndarray:
         # precalculations  (self.hidden_state is previous hidden state)
@@ -84,14 +87,14 @@ class LSTM(BaseLayer):
 
             # ufx + wfh + bias
             net_gt = np.add(ufx_wfh, self.cell_bias)[0]
-            
+
             gt = []
             for idx, net in enumerate(net_gt):
                 if idx == 2:
                     gt.append(tanh(net))
                 elif idx != 2:
                     gt.append(sigmoid(net))
-            
+
             gt = np.array(gt)
             ic(ufx_wfh)
             ic(net_gt)

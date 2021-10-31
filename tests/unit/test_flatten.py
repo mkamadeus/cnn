@@ -1,5 +1,5 @@
 import numpy as np
-from cnn.layer import Flatten
+from lembek.layer import Flatten
 
 
 def test_flatten():

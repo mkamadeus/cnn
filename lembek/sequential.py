@@ -1,13 +1,13 @@
 from typing import List
-from cnn.errors import mean_sum_squared_error
-from cnn.layer.base import BaseLayer
+from lembek.errors import mean_sum_squared_error
+from lembek.layer.base import BaseLayer
 from icecream import ic
 import numpy as np
 from tqdm import tqdm
 import pickle
 import time
 
-from cnn.layer.output import Output
+from lembek.layer.output import Output
 
 
 class Sequential:

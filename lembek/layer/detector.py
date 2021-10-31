@@ -1,6 +1,6 @@
 import numpy as np
-from cnn.activations import linear, relu, sigmoid
-from cnn.layer.base import BaseLayer
+from lembek.activations import linear, relu, sigmoid
+from lembek.layer.base import BaseLayer
 
 DETECTOR_MODES = ["relu", "sigmoid", "linear"]
 

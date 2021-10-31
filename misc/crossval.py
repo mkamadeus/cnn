@@ -1,6 +1,6 @@
 from sklearn.model_selection import KFold
 from sklearn.metrics import accuracy_score
-from cnn.utils import load_model
+from lembek.utils import load_model
 from mlxtend.data import mnist_data
 from icecream import ic
 

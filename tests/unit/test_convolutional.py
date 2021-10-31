@@ -1,9 +1,10 @@
-from cnn.layer.convolutional import Convolutional
-from cnn.layer import Dense
+from lembek.layer.convolutional import Convolutional
+from lembek.layer import Dense
 import json
 import numpy as np
 from icecream import ic
-from cnn.activations import softmax_derivative
+from lembek.activations import softmax_derivative
+
 
 def test_convolutional_with_filters_defined_3():
     with open("data/single_input/02/input.json", "r") as f:
@@ -24,6 +25,7 @@ def test_convolutional_with_filters_defined_3():
     assert result.shape == (1, 2, 2)
     assert np.testing.assert_array_equal(result, expected) is None
 
+
 def test_convolutional_with_filters_defined_2():
     with open("data/single_input/01/input.json", "r") as f:
         inputs = np.array(json.loads(f.read()))
@@ -43,6 +45,7 @@ def test_convolutional_with_filters_defined_2():
     assert result.shape == (1, 3, 3)
     assert np.testing.assert_array_equal(result, expected) is None
 
+
 def test_convolutional_with_random_filters_matrix_1():
     with open("data/multiple_inputs/01/inputs.json", "r") as f:
         inputs = np.array(json.loads(f.read()))
@@ -51,6 +54,7 @@ def test_convolutional_with_random_filters_matrix_1():
     result = layer.run(inputs[0])
 
     assert result.shape == (2, 2, 2)
+
 
 def test_convolutional_with_filters_defined_1():
     with open("data/multiple_inputs/01/inputs.json", "r") as f:
@@ -71,6 +75,7 @@ def test_convolutional_with_filters_defined_1():
     assert result.shape == (2, 2, 2)
     assert np.testing.assert_array_equal(result, expected[0]) is None
 
+
 def test_convolutional_with_random_filters_matrix_2():
     with open("data/mnist/inputs.json", "r") as f:
         inputs = np.array(json.loads(f.read()))
@@ -80,6 +85,7 @@ def test_convolutional_with_random_filters_matrix_2():
     result = layer.run(inputs)
 
     assert result.shape == (2, 27, 27)
+
 
 def test_convolutional_with_filters_defined_4():
     with open("data/single_input/03/input.json", "r") as f:
@@ -107,4 +113,3 @@ def test_convolutional_with_filters_defined_4():
     #     ]
     # )
     # assert np.testing.assert_allclose(result, expected, rtol=1e-06) is None
-
