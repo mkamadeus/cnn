@@ -1,5 +1,5 @@
 import idx2numpy
-from cnn.utils import load_model
+from lembek.utils import load_model
 import pandas as pd
 from icecream import ic
 

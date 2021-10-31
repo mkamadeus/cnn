@@ -1,6 +1,6 @@
-from cnn.layer.pooling import MaxPooling
-from cnn.layer import Detector, Convolutional, Flatten, Dense
-from cnn import Sequential
+from lembek.layer.pooling import MaxPooling
+from lembek.layer import Detector, Convolutional, Flatten, Dense
+from lembek import Sequential
 import json
 import numpy as np
 

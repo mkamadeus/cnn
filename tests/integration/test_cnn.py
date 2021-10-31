@@ -1,5 +1,5 @@
-from cnn.layer import Detector, Convolutional
-from cnn import Sequential
+from lembek.layer import Detector, Convolutional
+from lembek import Sequential
 import json
 import numpy as np
 

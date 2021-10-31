@@ -1,7 +1,7 @@
 from mlxtend.data import mnist_data
-from cnn.layer import Convolutional, Detector, Flatten, Dense, Output
-from cnn.layer.pooling import MaxPooling
-from cnn.sequential import Sequential
+from lembek.layer import Convolutional, Detector, Flatten, Dense, Output
+from lembek.layer.pooling import MaxPooling
+from lembek.sequential import Sequential
 from icecream import ic
 
 # constants
@@ -23,7 +23,15 @@ print(train_x[0])
 print(f"Dataset loaded with shape {train_x.shape}")
 
 model = Sequential(epoch=2)
-model.add(Convolutional(input_shape=(1, 28, 28), padding=0, stride=1, filter_count=2, kernel_shape=(3, 3)))
+model.add(
+    Convolutional(
+        input_shape=(1, 28, 28),
+        padding=0,
+        stride=1,
+        filter_count=2,
+        kernel_shape=(3, 3),
+    )
+)
 model.add(Detector(activation="sigmoid"))
 model.add(MaxPooling(size=(2, 2), stride=2))
 

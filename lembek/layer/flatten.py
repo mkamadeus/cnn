@@ -1,5 +1,5 @@
 import numpy as np
-from cnn.layer.base import BaseLayer
+from lembek.layer.base import BaseLayer
 
 
 class Flatten(BaseLayer):

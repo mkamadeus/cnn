@@ -1,5 +1,5 @@
 import numpy as np
-from cnn.layer import LSTM
+from lembek.layer import LSTM
 from icecream import ic
 
 

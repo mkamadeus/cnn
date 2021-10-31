@@ -1,5 +1,5 @@
 import numpy as np
-from cnn.layer import BaseLayer
+from lembek.layer import BaseLayer
 
 # from icecream import ic
 

@@ -1,7 +1,7 @@
 from mlxtend.data import mnist_data
-from cnn.layer import Convolutional, Detector, Flatten, Dense, Output
-from cnn.layer.pooling import MaxPooling
-from cnn.sequential import Sequential
+from lembek.layer import Convolutional, Detector, Flatten, Dense, Output
+from lembek.layer.pooling import MaxPooling
+from lembek.sequential import Sequential
 from icecream import ic
 import pandas as pd
 import idx2numpy
