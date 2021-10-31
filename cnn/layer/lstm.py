@@ -74,13 +74,13 @@ class LSTM(BaseLayer):
 
         for inp in inputs:
             ic(self.forget_weight)
-            ic(inputs)
             ic(self.forget_recurrent_weight)
             ic(self.hidden_state)
             # ufx_wfh = np.matmul(self.forget_weight, inputs) + np.matmul(self.forget_recurrent_weight, self.hidden_state)
             wfh = np.matmul(self.hidden_state, self.forget_recurrent_weight)
             ic(wfh)
-            ufx_wfh = np.matmul(self.forget_weight, inp.T) + wfh
+            ic(inp)
+            ufx_wfh = np.add(np.matmul(self.forget_weight, inp.T), wfh)
 
             # ufx + wfh + bias
             net_gt = np.add(ufx_wfh, self.cell_bias)[0]
