@@ -65,10 +65,10 @@ class LSTM(BaseLayer):
 
         # for testing purpose only
         # komen aja ntar
-        self.forget_weight = np.array([[0.7, 0.45], [0.95, 0.8], [0.45, 0.25], [0.6, 0.4]])
-        self.forget_recurrent_weight = np.array([[0.1, 0.8, 0.15, 0.25]])
-        self.hidden_state = np.array([0])
-        self.cell_bias = np.array([[0.15, 0.65, 0.2, 0.1]])
+        # self.forget_weight = np.array([[0.7, 0.45], [0.95, 0.8], [0.45, 0.25], [0.6, 0.4]])
+        # self.forget_recurrent_weight = np.array([[0.1, 0.8, 0.15, 0.25]])
+        # self.hidden_state = np.array([0])
+        # self.cell_bias = np.array([[0.15, 0.65, 0.2, 0.1]])
 
     def run(self, inputs: np.array) -> np.ndarray:
         # precalculations  (self.hidden_state is previous hidden state)
