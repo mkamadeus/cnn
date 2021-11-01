@@ -13,7 +13,7 @@ class LSTM(BaseLayer):
     Defines a LSTM layer.
     """
 
-    def __init__(self, size: int, input_size: tuple, recurrent_weights=None, into_weights=None):
+    def __init__(self, size: int, input_size: tuple, weights=None, recurrent_weights=None, biases=None):
         self.size = size
 
         if len(input_size) != 2:
@@ -21,34 +21,49 @@ class LSTM(BaseLayer):
 
         self.input_size = input_size
         self.n_features = input_size[1]
-        self.init_random_weight()
+        # the weights are later divided into 4 slots, 0: forget gate, 1: input gate, 2: cell state, 3: output gate
+        if weights is None:
+            self.init_random_weights()
+        else:
+            self.weights = weights
+        if recurrent_weights is None:
+            self.init_random_recurrent_weights()
+        else:
+            self.recurrent_weights = recurrent_weights
+        if biases is None:
+            self.init_random_biases()
+        else:
+            self.biases = biases
+        self.init_states()
 
-    def init_random_weight(self):
-        # divided into 4 slots, 0: forget gate, 1: input gate, 2: cell state, 3: output gate
+    def init_random_weights(self):
 
         # init weights (U)
         self.weights = generate_random_uniform_matrixes_lstm((4, self.size, self.n_features))
 
+        # for testing purpose only
+        # komen aja ntar
+        # self.weights = np.array([[[0.7, 0.45]], [[0.95, 0.8]], [[0.45, 0.25]], [[0.6, 0.4]]])
+
+        # self.recurrent_weights = np.array([[[0.1]], [[0.8]], [[0.15]], [[0.25]]])
+
+        # self.biases = np.array([[[0.15]], [[0.65]], [[0.2]], [[0.1]]])
+
+        # self.hidden_state = np.array([[0]])
+        # self.cell_state = np.array([[0]])
+
+    def init_random_recurrent_weights(self):
         # init recurrent weights (W)
         self.recurrent_weights = generate_random_uniform_matrixes_lstm((4, self.size, self.n_features))
 
+    def init_random_biases(self):
         # init biases (b)
         self.biases = generate_random_uniform_matrixes_lstm((4, self.size, 1))
 
+    def init_states(self):
         # init states
-        self.cell_state = np.zeros((self.size, self.size))
-        self.hidden_state = np.zeros((self.size, self.size))
-
-        # for testing purpose only
-        # komen aja ntar
-        self.weights = np.array([[[0.7, 0.45]], [[0.95, 0.8]], [[0.45, 0.25]], [[0.6, 0.4]]])
-
-        self.recurrent_weights = np.array([[[0.1]], [[0.8]], [[0.15]], [[0.25]]])
-
-        self.biases = np.array([[[0.15]], [[0.65]], [[0.2]], [[0.1]]])
-
-        self.hidden_state = np.array([[0]])
-        self.cell_state = np.array([[0]])
+        self.cell_state = np.zeros((self.size, 1))
+        self.hidden_state = np.zeros((self.size, 1))
 
     def run(self, inputs: np.array) -> np.ndarray:
         # precalculations  (self.hidden_state is previous hidden state)
@@ -60,7 +75,7 @@ class LSTM(BaseLayer):
             ic(self.recurrent_weights)
             ic(self.hidden_state)
             # ufx_wfh = np.matmul(self.forget_weight, inputs) + np.matmul(self.forget_recurrent_weight, self.hidden_state)
-            wh = np.matmul(self.hidden_state, self.recurrent_weights)
+            wh = np.matmul(self.recurrent_weights, self.hidden_state)
             ic(wh)
             ic(inp)
             # should reshape input because this input will be distributed to all gates
@@ -111,7 +126,7 @@ class LSTM(BaseLayer):
         # # set hidden state (self.hidden_state being set to current hidden state)
         # self.hidden_state = self.output_state * tanh(self.cell_state)
 
-        return self.hidden_state
+        return self.hidden_state.flatten()
 
     def compute_delta(self, delta: np.ndarray):
         pass
