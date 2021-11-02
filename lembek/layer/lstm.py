@@ -54,7 +54,7 @@ class LSTM(BaseLayer):
 
     def init_random_recurrent_weights(self):
         # init recurrent weights (W)
-        self.recurrent_weights = generate_random_uniform_matrixes_lstm((4, self.size, self.n_features))
+        self.recurrent_weights = generate_random_uniform_matrixes_lstm((4, self.size, self.size))
 
     def init_random_biases(self):
         # init biases (b)
