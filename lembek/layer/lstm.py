@@ -69,7 +69,7 @@ class LSTM(BaseLayer):
         """
         LSTM forward propagation.
         """
-        
+
         # precalculations  (self.hidden_state is previous hidden state)
         # iterasi tiap input = iterasi tiap timestep
         if len(inputs) != self.input_size[0]:

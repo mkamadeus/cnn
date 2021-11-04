@@ -33,4 +33,3 @@ def test_lstm_3():
     dense_expected = np.array([0.6570920649, 1.16840346])
     ic(dense_result)
     assert np.testing.assert_array_almost_equal(dense_result, dense_expected, decimal=6) is None
-
