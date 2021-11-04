@@ -21,11 +21,15 @@ class LSTM(BaseLayer):
 
         self.input_size = input_size
         self.n_features = input_size[1]
+
         # the weights are later divided into 4 slots, 0: forget gate, 1: input gate, 2: cell state, 3: output gate
         if weights is None:
             self.init_random_weights()
         else:
+            # if weights[0] != 4 or weights[1] != self.input_size[0] or weights[2] != self.n_features:
+            #     raise ValueError("invalid shape for given weight")
             self.weights = weights
+
         if recurrent_weights is None:
             self.init_random_recurrent_weights()
         else:
@@ -37,38 +41,39 @@ class LSTM(BaseLayer):
         self.init_states()
 
     def init_random_weights(self):
-
-        # init weights (U)
+        """
+        Initialize weights (U) of the LSTM.
+        """
         self.weights = generate_random_uniform_matrixes_lstm((4, self.size, self.n_features))
 
-        # for testing purpose only
-        # komen aja ntar
-        # self.weights = np.array([[[0.7, 0.45]], [[0.95, 0.8]], [[0.45, 0.25]], [[0.6, 0.4]]])
-
-        # self.recurrent_weights = np.array([[[0.1]], [[0.8]], [[0.15]], [[0.25]]])
-
-        # self.biases = np.array([[[0.15]], [[0.65]], [[0.2]], [[0.1]]])
-
-        # self.hidden_state = np.array([[0]])
-        # self.cell_state = np.array([[0]])
-
     def init_random_recurrent_weights(self):
-        # init recurrent weights (W)
+        """
+        Initialize reccurrent weights (W) of the LSTM.
+        """
         self.recurrent_weights = generate_random_uniform_matrixes_lstm((4, self.size, self.size))
 
     def init_random_biases(self):
-        # init biases (b)
+        """
+        Initialize biases (b) of the LSTM.
+        """
         self.biases = generate_random_uniform_matrixes_lstm((4, self.size, 1))
 
     def init_states(self):
-        # init states
+        """
+        Initialize cell state (c) and hidden state (h) of the LSTM.
+        """
         self.cell_state = np.zeros((self.size, 1))
         self.hidden_state = np.zeros((self.size, 1))
 
     def run(self, inputs: np.array) -> np.ndarray:
-        # precalculations  (self.hidden_state is previous hidden state)
+        """
+        LSTM forward propagation
+        """
 
+        # precalculations  (self.hidden_state is previous hidden state)
         # iterasi tiap input = iterasi tiap timestep
+        if len(inputs) != self.input_size[0]:
+            raise ValueError(f"expected {self.input_size[0]} timesteps, found {len(inputs)}")
 
         for inp in inputs:
             ic(self.weights)
@@ -84,6 +89,7 @@ class LSTM(BaseLayer):
             ic(ux_wh)
 
             # ufx + wfh + bias
+            ic(self.biases)
             nets = np.add(ux_wh, self.biases)
             ic(nets)
 
@@ -102,29 +108,6 @@ class LSTM(BaseLayer):
 
             self.hidden_state = gates[3] * tanh(self.cell_state)
             ic(self.hidden_state)
-            # self.cell_state = self.forget_gate * self.cell_state + cell_tmp_state
-
-        # uix_wih = np.matmul(self.input_weight, inputs) + np.matmul(self.input_recurrent_weight, self.hidden_state)
-        # ucx_wch = np.matmul(self.cell_weight, inputs) + np.matmul(self.cell_recurrent_weight, self.hidden_state)
-        # uox_woh = np.matmul(self.output_weight, inputs) + np.matmul(self.output_recurrent_weight, self.hidden_state)
-
-        # # forget gate
-        # self.forget_gate = sigmoid(ufx_wfh + self.forget_bias)
-
-        # # input gate
-        # self.input_gate = sigmoid(uix_wih + self.input_bias)
-        # # self.input_gate = sigmoid(self.input_gate)
-
-        # # cell state (self.cell_state is previous cell state, being set to current cell state)
-        # cell_tmp_state = tanh(ucx_wch + self.cell_bias)
-        # cell_tmp_state = cell_tmp_state * self.input_gate
-        # self.cell_state = self.forget_gate * self.cell_state + cell_tmp_state
-
-        # # output gate
-        # self.output_state = sigmoid(uox_woh + self.output_bias)
-
-        # # set hidden state (self.hidden_state being set to current hidden state)
-        # self.hidden_state = self.output_state * tanh(self.cell_state)
 
         return self.hidden_state.flatten()
 
