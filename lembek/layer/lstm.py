@@ -67,13 +67,16 @@ class LSTM(BaseLayer):
 
     def run(self, inputs: np.array) -> np.ndarray:
         """
-        LSTM forward propagation
+        LSTM forward propagation.
         """
-
+        
         # precalculations  (self.hidden_state is previous hidden state)
         # iterasi tiap input = iterasi tiap timestep
         if len(inputs) != self.input_size[0]:
             raise ValueError(f"expected {self.input_size[0]} timesteps, found {len(inputs)}")
+
+        # reset cell n hidden state before running timesteps
+        self.init_states()
 
         for inp in inputs:
             ic(self.weights)
