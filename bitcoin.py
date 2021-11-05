@@ -8,7 +8,7 @@ from lembek.sequential import Sequential
 
 WINDOW_SIZE = 32
 COLUMN_COUNT = 6
-STRIDE = 16
+STRIDE = 1
 
 ic.disable()
 
@@ -19,10 +19,10 @@ def preprocess():
     train = train.sort_values("Date").reset_index(drop=True)
     train = train.loc[243:]
     train["Volume"] = train["Volume"].str.replace(",", "").astype(np.int32)
+    print(train)
     train = train.drop(columns=["Date"])
     train = train.reset_index(drop=True)
     ic(train.head())
-
     COLUMN_COUNT = len(train.columns)
 
     # windowing
@@ -47,6 +47,7 @@ def preprocess():
 
 x_train, y_train = preprocess()
 print(x_train.shape, y_train.shape)
+print()
 
 # model definition
 lstm_layer = LSTM(size=6, input_size=(WINDOW_SIZE, COLUMN_COUNT))
@@ -54,7 +55,9 @@ dense_layer = Dense(size=6, input_size=6, activation="linear")
 
 model = Sequential(layers=[lstm_layer, dense_layer])
 model.summary(input_shape=None)
+print()
 
+print(f"window size: {WINDOW_SIZE}\tstride size: {STRIDE}")
 for i, window in enumerate(x_train):
     result = model.forward_phase(window)
     print(f"Window {i}: {result}")
