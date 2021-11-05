@@ -26,8 +26,6 @@ class LSTM(BaseLayer):
         if weights is None:
             self.init_random_weights()
         else:
-            # if weights[0] != 4 or weights[1] != self.input_size[0] or weights[2] != self.n_features:
-            #     raise ValueError("invalid shape for given weight")
             self.weights = weights
 
         if recurrent_weights is None:
@@ -72,17 +70,17 @@ class LSTM(BaseLayer):
 
         # precalculations  (self.hidden_state is previous hidden state)
         # iterasi tiap input = iterasi tiap timestep
+
         if len(inputs) != self.input_size[0]:
             raise ValueError(f"expected {self.input_size[0]} timesteps, found {len(inputs)}")
 
         # reset cell n hidden state before running timesteps
         self.init_states()
-
         for inp in inputs:
             ic(self.weights)
             ic(self.recurrent_weights)
             ic(self.hidden_state)
-            # ufx_wfh = np.matmul(self.forget_weight, inputs) + np.matmul(self.forget_recurrent_weight, self.hidden_state)
+
             wh = np.matmul(self.recurrent_weights, self.hidden_state)
             ic(wh)
             ic(inp)
@@ -111,6 +109,7 @@ class LSTM(BaseLayer):
 
             self.hidden_state = gates[3] * tanh(self.cell_state)
             ic(self.hidden_state)
+            ic.disable()
 
         return self.hidden_state.flatten()
 
@@ -124,7 +123,7 @@ class LSTM(BaseLayer):
         return "lstm"
 
     def get_shape(self, input_shape=None):
-        return (1, 1, self.size)
+        return self.size
 
     def get_weight_count(self):
         return 4 * self.size * (self.n_features + self.size + 1)

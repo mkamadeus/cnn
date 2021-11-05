@@ -106,8 +106,6 @@ class Dense(BaseLayer):
         return delta_out_prev_layer.flatten()
 
     def update_weights(self, learning_rate: float, momentum: float):
-        # print("denseweight")
-        # update weight
         self.weights = self.weights - learning_rate * self.delta + momentum * self.velocity
         self.velocity = self.delta
 
@@ -118,7 +116,7 @@ class Dense(BaseLayer):
         return "dense"
 
     def get_shape(self, input_shape=None):
-        return (1, 1, self.size)
+        return self.size
 
     def get_weight_count(self):
         return len(self.weights.flatten())

@@ -8,6 +8,7 @@ from lembek.sequential import Sequential
 
 WINDOW_SIZE = 32
 COLUMN_COUNT = 6
+STRIDE = 16
 
 ic.disable()
 
@@ -27,8 +28,7 @@ def preprocess():
     # windowing
     windows = np.empty(shape=(0, WINDOW_SIZE, COLUMN_COUNT))
     labels = np.empty(shape=(0, 1, COLUMN_COUNT))
-    for i in tqdm(range(0, len(train) - WINDOW_SIZE)):
-        # window = []
+    for i in tqdm(range(0, len(train) - WINDOW_SIZE, STRIDE)):
         window = train.iloc[i : i + WINDOW_SIZE].to_numpy().reshape(1, WINDOW_SIZE, COLUMN_COUNT)
         ic(window)
         windows = np.append(windows, window, axis=0)
@@ -49,10 +49,12 @@ x_train, y_train = preprocess()
 print(x_train.shape, y_train.shape)
 
 # model definition
-lstm_layer = LSTM(size=2, input_size=(WINDOW_SIZE, COLUMN_COUNT))
-dense_layer = Dense(size=6, input_size=2, activation="linear")
-# output_layer = Output(size=)
+lstm_layer = LSTM(size=6, input_size=(WINDOW_SIZE, COLUMN_COUNT))
+dense_layer = Dense(size=6, input_size=6, activation="linear")
 
 model = Sequential(layers=[lstm_layer, dense_layer])
-result = model.forward_phase(x_train[0])
-print(result)
+model.summary(input_shape=None)
+
+for i, window in enumerate(x_train):
+    result = model.forward_phase(window)
+    print(f"Window {i}: {result}")
