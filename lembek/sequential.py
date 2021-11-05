@@ -124,11 +124,6 @@ class Sequential:
         """
         🥒 Output summary.
         """
-        # if input_shape is None:
-        #     n_channel = len(self.inputs[0])
-        #     length = len(self.inputs[0][0])
-        #     width = len(self.inputs[0][0][0])
-        #     input_shape = (n_channel, length, width)
         total_weight = 0
 
         print("----------------------------------------------------")

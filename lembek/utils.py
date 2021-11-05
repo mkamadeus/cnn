@@ -52,18 +52,13 @@ def generate_random_uniform_matrixes_lstm(size: tuple):
     )
 
 
-def generate_random_uniform_matrixes(
-    n_filter: int, n_channel: int, size: Tuple[int, int]
-):
+def generate_random_uniform_matrixes(n_filter: int, n_channel: int, size: Tuple[int, int]):
     """
     Generates n random uniform matrixes from given kernel size
     """
     np.random.seed(42)
     return np.array(
-        [
-            [np.random.uniform(low=-1.0, high=1.0, size=size) for _ in range(n_channel)]
-            for _ in range(n_filter)
-        ]
+        [[np.random.uniform(low=-1.0, high=1.0, size=size) for _ in range(n_channel)] for _ in range(n_filter)]
     )
 
 
